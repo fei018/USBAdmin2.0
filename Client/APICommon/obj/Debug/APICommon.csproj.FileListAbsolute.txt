@@ -1,5 +1,0 @@
-C:\CodeRepos\USBAdmin - test\Client\APICommon\obj\Debug\APICommon.csproj.CoreCompileInputs.cache
-C:\CodeRepos\USBAdmin - test\Client\APICommon\bin\Debug\APICommon.dll
-C:\CodeRepos\USBAdmin - test\Client\APICommon\bin\Debug\APICommon.pdb
-C:\CodeRepos\USBAdmin - test\Client\APICommon\obj\Debug\APICommon.dll
-C:\CodeRepos\USBAdmin - test\Client\APICommon\obj\Debug\APICommon.pdb

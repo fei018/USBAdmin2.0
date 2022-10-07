@@ -1,5 +1,0 @@
-Unistall serivce done.
-Copy dll files done.
-Write batch file done.
-Install service done.
-Setup done.
