@@ -1,0 +1,13 @@
+C:\CodeRepos\USBAdmin - test\Client\USBAdminService\bin\Debug\USBAdminService.exe.config
+C:\CodeRepos\USBAdmin - test\Client\USBAdminService\bin\Debug\USBAdminService.exe
+C:\CodeRepos\USBAdmin - test\Client\USBAdminService\bin\Debug\USBAdminService.pdb
+C:\CodeRepos\USBAdmin - test\Client\USBAdminService\obj\Debug\USBAdminService.csproj.AssemblyReference.cache
+C:\CodeRepos\USBAdmin - test\Client\USBAdminService\obj\Debug\USBAdminService.csproj.CoreCompileInputs.cache
+C:\CodeRepos\USBAdmin - test\Client\USBAdminService\obj\Debug\USBAdminService.exe
+C:\CodeRepos\USBAdmin - test\Client\USBAdminService\obj\Debug\USBAdminService.pdb
+C:\CodeRepos\USBAdmin - test\Client\USBAdminService\bin\Debug\AgentLib.dll
+C:\CodeRepos\USBAdmin - test\Client\USBAdminService\bin\Debug\ToolsCommon.dll
+C:\CodeRepos\USBAdmin - test\Client\USBAdminService\bin\Debug\Newtonsoft.Json.dll
+C:\CodeRepos\USBAdmin - test\Client\USBAdminService\bin\Debug\AgentLib.pdb
+C:\CodeRepos\USBAdmin - test\Client\USBAdminService\bin\Debug\Newtonsoft.Json.xml
+C:\CodeRepos\USBAdmin - test\Client\USBAdminService\obj\Debug\USBAdminService.csproj.CopyComplete

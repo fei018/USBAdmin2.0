@@ -1,0 +1,7 @@
+cd /d "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin"
+
+MSBuild.exe "C:\CodeRepos\USBAdmin\Client\HHITtoolsService\HHITtoolsService.csproj" -clp:ErrorsOnly;WarningsOnly -t:Rebuild -p:Configuration=Release 
+
+MSBuild.exe "C:\CodeRepos\USBAdmin\Client\SetupClient\SetupClient.csproj" -clp:ErrorsOnly;WarningsOnly -t:Rebuild -p:Configuration=Release
+
+pause

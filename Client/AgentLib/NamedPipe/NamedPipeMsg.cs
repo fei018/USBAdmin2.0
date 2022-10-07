@@ -1,0 +1,15 @@
+﻿using System.Collections.Generic;
+
+namespace AgentLib
+{
+    public class NamedPipeMsg
+    {
+        public NamedPipeMsgType MsgType { get; set; }
+
+        public UsbBase Usb { get; set; }
+
+        public string Message { get; set; }
+
+        public int WinlogonSessionId { get; set; }
+    }
+}

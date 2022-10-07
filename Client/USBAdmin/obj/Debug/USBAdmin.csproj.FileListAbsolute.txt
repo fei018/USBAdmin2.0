@@ -1,0 +1,10 @@
+C:\CodeRepos\USBAdmin - test\Client\USBAdmin\bin\Debug\USBAdmin.exe.config
+C:\CodeRepos\USBAdmin - test\Client\USBAdmin\bin\Debug\USBAdmin.exe
+C:\CodeRepos\USBAdmin - test\Client\USBAdmin\bin\Debug\USBAdmin.pdb
+C:\CodeRepos\USBAdmin - test\Client\USBAdmin\obj\Debug\USBAdmin.Properties.Resources.resources
+C:\CodeRepos\USBAdmin - test\Client\USBAdmin\obj\Debug\USBAdmin.csproj.GenerateResource.cache
+C:\CodeRepos\USBAdmin - test\Client\USBAdmin\obj\Debug\USBAdmin.csproj.CoreCompileInputs.cache
+C:\CodeRepos\USBAdmin - test\Client\USBAdmin\obj\Debug\USBAdmin.exe
+C:\CodeRepos\USBAdmin - test\Client\USBAdmin\obj\Debug\USBAdmin.pdb
+C:\CodeRepos\USBAdmin - test\Client\USBAdmin\obj\Debug\USBAdmin.csproj.AssemblyReference.cache
+C:\CodeRepos\USBAdmin - test\Client\USBAdmin\obj\Debug\USBAdmin.USBAdminForm.resources
