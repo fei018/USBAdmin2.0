@@ -98,10 +98,6 @@
     <Compile Include="USBFilter\UsbDisk.cs" />
     <Compile Include="USBFilter\UsbFilter.cs" />
     <Compile Include="USBFilter\UsbFilter2.cs" />
-    <Compile Include="USBFilter\USBFilterForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="USBFilter\USBFilterServer.cs" />
     <Compile Include="USBFilter\UsbLog.cs" />
     <Compile Include="USBFilter\UsbRequest.cs" />
     <Compile Include="USBFilter\UsbWhitelist.cs" />

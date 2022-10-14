@@ -1,21 +1,28 @@
-﻿using System;
+﻿using AgentLib;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using UsbMonitor;
 
-namespace AgentLib
+namespace USBAdminFilter
 {
-    public class USBFilterForm : UsbMonitorForm
+    public partial class USBFilterForm : UsbMonitorForm
     {
-        private UsbFilter _usbFilter;
-
-        public USBFilterForm() : base()
+        public USBFilterForm()
         {
+            InitializeComponent();
+
             _usbFilter = new UsbFilter();
             _usbFilter.UsbDeviceNotRegister += _usbFilter_UsbDeviceNotRegister;
         }
+
+        private UsbFilter _usbFilter;
 
         private void _usbFilter_UsbDeviceNotRegister(object sender, UsbBase e)
         {
@@ -31,7 +38,7 @@ namespace AgentLib
                     When_UsbDisk_Arrival(args.Name);
                 }
             }
-        }     
+        }
 
         private void When_UsbDisk_Arrival(string diskPath)
         {
