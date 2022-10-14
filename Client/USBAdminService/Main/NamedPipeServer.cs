@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using AgentLib;
 using NamedPipeWrapper;
 
-namespace USBAdminService.Main
+namespace USBAdminService
 {
-    public class NamedPipeServer
+    public class NamedPipeServer : IAdminServer
     {
         private string _pipeName;
 
@@ -118,6 +118,15 @@ namespace USBAdminService.Main
             {
                 MsgType = NamedPipeMsgType.UsbNotRegister_TrayHandle,
                 Usb = usbBase
+            };
+            _server.PushMessage(msg);
+        }
+
+        public void SendMsg_To_Tray_Close()
+        {
+            NamedPipeMsg msg = new NamedPipeMsg
+            {
+                MsgType = NamedPipeMsgType.ToCloseProcess_TrayHandle
             };
             _server.PushMessage(msg);
         }

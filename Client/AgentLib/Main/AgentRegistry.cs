@@ -31,30 +31,21 @@ namespace AgentLib
         }
 
         /// <summary>
-        /// "HHITtoolsService.exe" full path
+        /// "USBAdminService.exe" full path
         /// </summary>
-        public static string HHITtoolsServicePath
+        public static string USBAdminServicePath
         {
-            get => Environment.ExpandEnvironmentVariables(ReadRegKey(nameof(HHITtoolsServicePath)));
-            set => SetRegKey(nameof(HHITtoolsServicePath), value, RegistryValueKind.String);
+            get => Environment.ExpandEnvironmentVariables(ReadRegKey(nameof(USBAdminServicePath)));
+            set => SetRegKey(nameof(USBAdminServicePath), value, RegistryValueKind.String);
         }
 
         /// <summary>
-        /// "HHITtoolsUSB.exe" full path
+        /// "USBAdminTray.exe" full path
         /// </summary>
-        public static string HHITtoolsUSBPath
+        public static string USBAdminTrayPath
         {
-            get => Environment.ExpandEnvironmentVariables(ReadRegKey(nameof(HHITtoolsUSBPath)));
-            set => SetRegKey(nameof(HHITtoolsUSBPath), value, RegistryValueKind.String);
-        }
-
-        /// <summary>
-        /// "HHITtoolsTray.exe" full path
-        /// </summary>
-        public static string HHITtoolsTrayPath
-        {
-            get => Environment.ExpandEnvironmentVariables(ReadRegKey(nameof(HHITtoolsTrayPath)));
-            set => SetRegKey(nameof(HHITtoolsTrayPath), value, RegistryValueKind.String);
+            get => Environment.ExpandEnvironmentVariables(ReadRegKey(nameof(USBAdminTrayPath)));
+            set => SetRegKey(nameof(USBAdminTrayPath), value, RegistryValueKind.String);
         }
 
 

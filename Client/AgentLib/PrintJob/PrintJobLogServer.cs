@@ -6,46 +6,48 @@ using System.Threading.Tasks;
 
 namespace AgentLib
 {
-    public class PrintJobLogServer
+    public class PrintJobLogServer : IAdminServer
     {
         private static Dictionary<string, PrintQueueMonitor> _PrintJobMonitorList { get; set; }
 
         #region Start
         public void Start()
         {
-            Stop();
-
-            Task.Run(() =>
+            try
             {
-                try
+                if (!AgentRegistry.PrintJobLogEnabled)
                 {
-                    _PrintJobMonitorList = _PrintJobMonitorList ?? new Dictionary<string, PrintQueueMonitor>();
+                    return;
+                }
 
-                    var ipPrinters = LocalPrinterInfo.GetIPPrinterList();
-                    foreach (var printer in ipPrinters)
+                Stop();
+
+                _PrintJobMonitorList = _PrintJobMonitorList ?? new Dictionary<string, PrintQueueMonitor>();
+
+                var ipPrinters = LocalPrinterInfo.GetIPPrinterList();
+                foreach (var printer in ipPrinters)
+                {
+                    try
                     {
-                        try
-                        {
-                            var printJobMonitor = new PrintQueueMonitor(printer.Name);
+                        var printJobMonitor = new PrintQueueMonitor(printer.Name);
 
-                            printJobMonitor.OnJobStatusChange += PrintJobMonitor_OnJobStatusChange;
+                        printJobMonitor.OnJobStatusChange += PrintJobMonitor_OnJobStatusChange;
 
-                            // start printJob monitor
-                            printJobMonitor.Start();
+                        // start printJob monitor
+                        printJobMonitor.Start();
 
-                            _PrintJobMonitorList.Add(printJobMonitor.PrinterName, printJobMonitor);
-                        }
-                        catch (Exception ex)
-                        {
-                            AgentLogger.Error(ex.GetBaseException().Message);
-                        }
+                        _PrintJobMonitorList.Add(printJobMonitor.PrinterName, printJobMonitor);
+                    }
+                    catch (Exception ex)
+                    {
+                        AgentLogger.Error(ex.GetBaseException().Message);
                     }
                 }
-                catch (Exception ex)
-                {
-                    AgentLogger.Error(ex.GetBaseException().Message);
-                }
-            });
+            }
+            catch (Exception ex)
+            {
+                AgentLogger.Error(ex.GetBaseException().Message);
+            }
         }
         #endregion
 
@@ -106,21 +108,17 @@ namespace AgentLib
 #if DEBUG
                     //Debugger.Break();
 #endif
-                    Task.Run(() =>
+                    Task.Factory.StartNew(() =>
                     {
-                        if (AgentRegistry.PrintJobLogEnabled)
+                        try
                         {
-                            try
-                            {
-                                new AgentHttpHelp().PostPrintJobLog(job);
-                            }
-                            catch (Exception ex)
-                            {
-                                AgentLogger.Error(ex.Message);
-                            }
+                            new AgentHttpHelp().PostPrintJobLog(job);
+                        }
+                        catch (Exception ex)
+                        {
+                            AgentLogger.Error(ex.Message);
                         }
                     });
-
                 }
             }
             catch (Exception)

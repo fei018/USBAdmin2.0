@@ -1,0 +1,69 @@
+﻿using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+
+namespace SetupClient
+{
+    public class SetupRegistryKey
+    {
+        static Dictionary<string, string> Get_USBAdminKeys()
+        {
+            var keys = new Dictionary<string, string>()
+            {
+                {"AgentDataDir",@"%ProgramData%\USBAdmin"},
+                {"UsbWhitelistPath",@"%ProgramFiles%\USBAdmin\UsbWhitelist.dat"},
+                {"USBAdminServicePath",@"%ProgramFiles%\USBAdmin\USBAdminService.exe"},
+                {"USBAdminTrayPath",@"%ProgramFiles%\USBAdmin\USBAdminTray.exe"},
+                {"UsbFilterEnabled","false"},
+                {"UsbLogEnabled","true"},
+                {"PrintJobLogEnabled","false"},
+                {"AgentTimerMinute","10"},
+                {"AgentHttpKey","usbb50ae7e95f144874a2739e119e8791e1"},
+                {"UsbWhitelistUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientGet/UsbWhitelist"},
+                {"AgentConfigUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientGet/AgentConfig"},
+                {"AgentRuleUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientGet/AgentRule"},
+                {"AgentUpdateUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientGet/AgentUpdate"},
+                {"PostUsbRequestUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientPost/PostUsbRequest"},
+                {"PostComputerInfoUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientPost/PostComputerInfo"},
+                {"PostUsbLogUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientPost/PostUsbLog"},
+                {"PostPrintJobLogUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientPost/PostPrintJobLog"}
+            };
+
+            keys.Add("AgentVersion", "1.0.19");
+
+            return keys;
+        }
+
+
+        static string _registryKeyLocation = "SOFTWARE\\HipHing\\USBAdmin";
+
+        #region + public void InitialRegistryKey()
+        public static void InitialRegistryKey()
+        {
+            try
+            {
+                var keys = Get_USBAdminKeys();
+
+                // Registry key location: Computer\HKEY_LOCAL_MACHINE
+                using (var hklm = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
+                {
+                    // delete old key
+                    hklm.DeleteSubKey(_registryKeyLocation, false);
+
+                    using (var usbKey = hklm.CreateSubKey(_registryKeyLocation, true))
+                    {
+                        foreach (var s in keys)
+                        {
+                            usbKey.SetValue(s.Key, s.Value, RegistryValueKind.String);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        #endregion
+    }
+}

@@ -7,6 +7,7 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
+using AgentLib;
 
 namespace USBAdminService
 {
@@ -19,10 +20,22 @@ namespace USBAdminService
 
         protected override void OnStart(string[] args)
         {
+            AdminServerManage.OnStart();
         }
 
         protected override void OnStop()
         {
+            AdminServerManage.OnStop();
+        }
+
+        protected override void OnSessionChange(SessionChangeDescription changeDescription)
+        {
+            if (changeDescription.Reason == SessionChangeReason.SessionLogon)
+            {
+                AdminServerManage.TrayServer.CreateTray();
+            }
+
+            base.OnSessionChange(changeDescription);
         }
     }
 }

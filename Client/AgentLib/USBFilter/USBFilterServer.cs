@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace AgentLib
 {
-    public class USBFilterService
+    public class USBFilterServer : IAdminServer
     {
         private static USBFilterForm _USBFilterForm;
 
@@ -19,6 +19,7 @@ namespace AgentLib
                 if (_USBFilterForm != null)
                 {
                     _USBFilterForm.Stop();
+                    _USBFilterForm = null;
                 }
 
                 _USBFilterForm = new USBFilterForm();
@@ -38,7 +39,11 @@ namespace AgentLib
         {
             try
             {
-                _USBFilterForm?.Stop();
+                if (_USBFilterForm != null)
+                {
+                    _USBFilterForm.Stop();
+                    _USBFilterForm = null;
+                }
             }
             catch (Exception)
             {

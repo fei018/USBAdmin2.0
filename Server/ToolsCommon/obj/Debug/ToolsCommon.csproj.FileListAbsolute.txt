@@ -5,6 +5,6 @@ C:\CodeRepos\USBAdmin - test\Server\ToolsCommon\bin\Debug\ToolsCommon.dll
 C:\CodeRepos\USBAdmin - test\Server\ToolsCommon\obj\Debug\ToolsCommon.csproj.CoreCompileInputs.cache
 C:\CodeRepos\USBAdmin - test\Server\ToolsCommon\obj\Debug\ToolsCommon.dll
 C:\CodeRepos\USBAdmin2.0\Server\ToolsCommon\bin\Debug\ToolsCommon.dll
-C:\CodeRepos\USBAdmin2.0\Server\ToolsCommon\obj\Debug\ToolsCommon.csproj.AssemblyReference.cache
 C:\CodeRepos\USBAdmin2.0\Server\ToolsCommon\obj\Debug\ToolsCommon.csproj.CoreCompileInputs.cache
 C:\CodeRepos\USBAdmin2.0\Server\ToolsCommon\obj\Debug\ToolsCommon.dll
+C:\CodeRepos\USBAdmin2.0\Server\ToolsCommon\obj\Debug\ToolsCommon.csproj.AssemblyReference.cache

@@ -81,7 +81,8 @@
     <Compile Include="GithubCode\NativeUsbLib\WinApis\uvcdesc.cs" />
     <Compile Include="GithubCode\NativeUsbLib\WinApis\WinError.cs" />
     <Compile Include="GithubCode\NativeUsbLib\WinApis\WinNtApi.cs" />
-    <Compile Include="NamedPipe\PipeEventArgs.cs" />
+    <Compile Include="Main\AppProcessHelp.cs" />
+    <Compile Include="Main\IAdminServer.cs" />
     <Compile Include="NamedPipe\NamedPipeMsg.cs" />
     <Compile Include="NamedPipe\NamedPipeMsgType.cs" />
     <Compile Include="PrintJob\LocalPrinterInfo.cs" />
