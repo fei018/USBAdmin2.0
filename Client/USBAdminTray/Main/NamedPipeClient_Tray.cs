@@ -2,6 +2,7 @@
 using NamedPipeWrapper;
 using System;
 using System.Windows;
+using System.Linq;
 
 namespace USBAdminTray
 {
@@ -69,65 +70,73 @@ namespace USBAdminTray
         #region _client_ServerMessage
         private void _client_ServerMessage(NamedPipeConnection<NamedPipeMsg, NamedPipeMsg> connection, NamedPipeMsg pipeMsg)
         {
-            try
+            if (pipeMsg == null)
             {
-                if (pipeMsg == null)
-                {
-                    throw new Exception("NamedPipeClient_Tray ServerMessage is null.");
-                }
-
-                switch (pipeMsg.MsgType)
-                {
-                    case NamedPipeMsgType.Msg_TrayHandle:
-                        Msg_TrayHandle(pipeMsg);
-                        break;
-
-                    case NamedPipeMsgType.UsbNotRegister_TrayHandle:
-                        UsbNotRegister_TrayHandle(pipeMsg);
-                        break;
-
-                    case NamedPipeMsgType.ToCloseProcess_TrayHandle:
-                        ToCloseProcess_TrayHandle();
-                        break;
-
-                    default:
-                        break;
-                }
+                MessageBox.Show("NamedPipeClient_Tray ServerMessage is null.");
             }
-            catch (Exception ex)
+
+            switch (pipeMsg.MsgType)
             {
-                MessageBox.Show(ex.GetBaseException().Message);
+                case NamedPipeMsgType.MsgBox_TrayHandle:
+                    Msg_TrayHandle(pipeMsg?.Message);
+                    break;
+
+                case NamedPipeMsgType.BalloonTip_TrayHandle:
+                    BalloonTip_TrayHandle(pipeMsg?.Message);
+                    break;
+
+                case NamedPipeMsgType.UsbNotRegister_TrayHandle:
+                    UsbNotRegister_TrayHandle(pipeMsg?.Usb);
+                    break;
+
+                case NamedPipeMsgType.ToCloseApp_TrayHandle:
+                    ToCloseApp_TrayHandle();
+                    break;
+
+                default:
+                    break;
             }
         }
 
-        private void Msg_TrayHandle(NamedPipeMsg msg)
+        private void Msg_TrayHandle(string msg)
         {
-            MessageBox.Show(msg.Message);
+            if (!string.IsNullOrEmpty(msg))
+            {
+                MessageBox.Show(msg, "From PipeServer");
+            }
         }
 
-        private void UsbNotRegister_TrayHandle(NamedPipeMsg msg)
+        private void BalloonTip_TrayHandle(string msg)
+        {
+            if (!string.IsNullOrEmpty(msg))
+            {
+                ServerManage_Tray.TrayIcon?.ShowBalloonTip(msg);
+            }
+        }
+
+        private void UsbNotRegister_TrayHandle(UsbBase usbBase)
         {
             App.Current.Dispatcher.Invoke(new Action(() =>
             {
                 try
                 {
-                    if (msg.Usb == null)
+                    if (usbBase == null)
                     {
-                        throw new Exception("NamedPipeClient_Tray.UsbNotRegister_TrayHandle(): msg.Usb == null");
+                        throw new Exception("NamedPipeClient_Tray.UsbNotRegister_TrayHandle(): usbBase == null");
                     }
 
                     var usbQRWin = new UsbQRCodeWindow();
-                    usbQRWin.SetUSBInfo(msg.Usb);
+                    usbQRWin.SetUSBInfo(usbBase);
                     usbQRWin.Show();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "USB Control");
+                    MessageBox.Show(ex.Message, "USBAdmin");
                 }
             }));
         }
 
-        private void ToCloseProcess_TrayHandle()
+        private void ToCloseApp_TrayHandle()
         {
             try
             {
@@ -136,31 +145,13 @@ namespace USBAdminTray
                     App.Current.MainWindow.Close();
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message);
             }
         }
         #endregion
 
         #region Send Message
-        public void SendMsg_CheckAndUpdateAgent()
-        {
-            try
-            {
-                NamedPipeMsg msg = new NamedPipeMsg
-                {
-                    MsgType = NamedPipeMsgType.UpdateAgent_ServerHandle
-                };
-
-                _client.PushMessage(msg);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
         public void SendMsg_UpdateSetting()
         {
             try

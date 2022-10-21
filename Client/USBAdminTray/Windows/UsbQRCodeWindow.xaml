@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:USBAdminTray"
         mc:Ignorable="d"
-        Title="USB Control" Height="300" Width="350" 
+        Title="USB QR Code" Height="300" Width="350" 
         ResizeMode="NoResize" Topmost="True"
         WindowStartupLocation="Manual" WindowStyle="ToolWindow">
     <Grid>
@@ -29,11 +29,11 @@
                 <TextBlock Text="Pid :" Canvas.Top="58" Canvas.Left="20"/>
                 <TextBlock Text="Serial :" Canvas.Top="76" Canvas.Left="20"/>
 
-                <TextBlock x:Name="txtBrand" Canvas.Left="80" Canvas.Top="5" Text=""/>
-                <TextBlock x:Name="txtProduct" Canvas.Left="80" Canvas.Top="22"/>
-                <TextBlock x:Name="txtVid" Canvas.Left="80" Canvas.Top="40"/>
-                <TextBlock x:Name="txtPid" Canvas.Left="80" Canvas.Top="58"/>
-                <TextBlock x:Name="txtSerial" Canvas.Left="80" Canvas.Top="76"/>
+                <TextBox BorderThickness="0" IsReadOnly="True" x:Name="txtBrand" Canvas.Left="80" Canvas.Top="5" Text=""/>
+                <TextBox BorderThickness="0" IsReadOnly="True" x:Name="txtProduct" Canvas.Left="80" Canvas.Top="22"/>
+                <TextBox BorderThickness="0" IsReadOnly="True" x:Name="txtVid" Canvas.Left="80" Canvas.Top="40"/>
+                <TextBox BorderThickness="0" IsReadOnly="True" x:Name="txtPid" Canvas.Left="80" Canvas.Top="58"/>
+                <TextBox BorderThickness="0" IsReadOnly="True" x:Name="txtSerial" Canvas.Left="80" Canvas.Top="76"/>
             </Canvas>
         </Grid>
 

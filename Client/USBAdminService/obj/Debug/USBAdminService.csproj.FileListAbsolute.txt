@@ -26,3 +26,9 @@ C:\CodeRepos\USBAdmin2.0\Client\USBAdminService\obj\Debug\USBAdminService.csproj
 C:\CodeRepos\USBAdmin2.0\Client\USBAdminService\obj\Debug\USBAdminService.csproj.CopyComplete
 C:\CodeRepos\USBAdmin2.0\Client\USBAdminService\obj\Debug\USBAdminService.exe
 C:\CodeRepos\USBAdmin2.0\Client\USBAdminService\obj\Debug\USBAdminService.pdb
+C:\CodeRepos\USBAdmin2.0\Client\USBAdminService\bin\Debug\USBAdminFilter.exe
+C:\CodeRepos\USBAdmin2.0\Client\USBAdminService\bin\Debug\USBAdminTray.exe
+C:\CodeRepos\USBAdmin2.0\Client\USBAdminService\bin\Debug\zxing.dll
+C:\CodeRepos\USBAdmin2.0\Client\USBAdminService\bin\Debug\USBAdminFilter.pdb
+C:\CodeRepos\USBAdmin2.0\Client\USBAdminService\bin\Debug\USBAdminTray.pdb
+C:\CodeRepos\USBAdmin2.0\Client\USBAdminService\bin\Debug\zxing.xml

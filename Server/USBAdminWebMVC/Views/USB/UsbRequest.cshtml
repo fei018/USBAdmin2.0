@@ -12,11 +12,11 @@
         <legend>USB Request</legend>
     </fieldset>
 
-    <div class="layui-input-inline">
+    @*<div class="layui-input-inline">
         <button class="layui-btn layui-btn-primary" type="button" data-btn="click" data-url="@usbReviewUrl">
             <i class="layui-icon">&#xe607;</i> Review
         </button>
-    </div>
+    </div>*@
 
     <div class="layui-input-inline">
         <button class="layui-btn layui-btn-primary" type="button" data-btn="click" data-url="@usbApproveUrl">
@@ -24,11 +24,11 @@
         </button>
     </div>
 
-    <div class="layui-input-inline">
+    @*<div class="layui-input-inline">
         <button class="layui-btn layui-btn-primary" type="button" data-btn="click" data-url="@usbRejectUrl">
             <i class="layui-icon">&#x1006;</i> Reject
         </button>
-    </div>
+    </div>*@
 
     <hr />
     <table id="index" lay-filter="index" class="layui-hide">
@@ -48,7 +48,7 @@
 
             var tableIns = table.render({
                 elem: '#index'
-                , url: '@usbReviewUrl'
+                , url: '@usbApproveUrl'
                 , page: true
                 , limit: 50
                 , cols: [[

@@ -51,8 +51,9 @@ namespace USBAdminService
 
                 _server.Start();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                AgentLogger.Error("NamedPipeServer.Start(): " + ex.Message);
             }
         }
 
@@ -84,51 +85,153 @@ namespace USBAdminService
         #region ClientMessage
         private void _server_ClientMessage(NamedPipeConnection<NamedPipeMsg, NamedPipeMsg> connection, NamedPipeMsg pipeMsg)
         {
+            if (pipeMsg == null)
+            {
+                AgentLogger.Error("NamedPipeServer.ClientMessage is null.");
+            }
+
+            switch (pipeMsg.MsgType)
+            {
+                case NamedPipeMsgType.UpdateSetting_ServerHandle:
+                    UpdateSetting_ServerHandle();
+                    break;
+
+                case NamedPipeMsgType.UsbNotRegister_ServerForward:
+                    UsbNotRegister_ServerForward(pipeMsg?.Usb);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        #region Handle
+
+        private void UpdateSetting_ServerHandle()
+        {
             try
             {
-                if (pipeMsg == null)
+                if (AgentUpdate.CheckNeedUpdate())
                 {
-                    throw new Exception("NamedPipeServer.ClientMessage is null.");
+                    new AgentUpdate().Update();
+                    SendMsg_To_Tray_BalloonTip("Agent new version checked\r\nwait to updating...");
+                    SendMsg_To_Tray_Close();
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                AgentLogger.Error(ex.Message);
+                SendMsg_To_Tray_Message(ex.Message);
+            }
+
+            StringBuilder error = new StringBuilder();
+
+            try
+            {
+                new AgentHttpHelp().UpdateAgentRule();
+            }
+            catch (Exception ex)
+            {
+                AgentLogger.Error(ex.Message);
+                error.AppendLine("Error: " + ex.Message);
+            }
+
+            try
+            {
+                new AgentHttpHelp().UpdateUSBWhitelist();
+            }
+            catch (Exception ex)
+            {
+                AgentLogger.Error(ex.Message);
+                error.AppendLine("Error: " + ex.Message);
+            }
+
+            if (string.IsNullOrEmpty(error.ToString()))
+            {
+                SendMsg_To_Tray_BalloonTip("Update setting done.");
+            }
+            else
+            {
+                SendMsg_To_Tray_Message(error.ToString());
+            }
+        }
+
+        private void UsbNotRegister_ServerForward(UsbBase usbBase)
+        {
+            try
+            {
+                if (usbBase == null)
+                {
+                    throw new Exception("NamedPipeServer.UsbNotRegister_ServerForward(UsbBase usbBase): usbBase is null");
                 }
 
-                switch (pipeMsg.MsgType)
+                NamedPipeMsg msg = new NamedPipeMsg
                 {
-                    case NamedPipeMsgType.UpdateAgent_ServerHandle:
+                    MsgType = NamedPipeMsgType.UsbNotRegister_TrayHandle,
+                    Usb = usbBase
+                };
+                _server.PushMessage(msg);
+            }
+            catch (Exception ex)
+            {
+                AgentLogger.Error(ex.Message);
+                SendMsg_To_Tray_Message(ex.Message);
+            }
+        }
+        #endregion
 
-                        break;
+        #endregion
 
-                    case NamedPipeMsgType.UpdateSetting_ServerHandle:
+        #region Send Message
+        public void SendMsg_To_Tray_Message(string text)
+        {
+            var newMsg = new NamedPipeMsg
+            {
+                MsgType = NamedPipeMsgType.MsgBox_TrayHandle,
+                Message = text
+            };
+            _server.PushMessage(newMsg);
+        }
 
-                        break;
+        public void SendMsg_To_Tray_BalloonTip(string text)
+        {
+            var newMsg = new NamedPipeMsg
+            {
+                MsgType = NamedPipeMsgType.BalloonTip_TrayHandle,
+                Message = text
+            };
+            _server.PushMessage(newMsg);
+        }
 
-                    default:
-                        break;
-                }
+        public void SendMsg_To_Tray_Close()
+        {
+            try
+            {
+                NamedPipeMsg msg = new NamedPipeMsg
+                {
+                    MsgType = NamedPipeMsgType.ToCloseApp_TrayHandle
+                };
+                _server.PushMessage(msg);
             }
             catch (Exception)
             {
             }
         }
-        #endregion
 
-        #region Send Message
-        public void SendMsg_To_Tray_USBNotRegister(UsbBase usbBase)
+        public void SendMsg_To_USBFilterForm_Close()
         {
-            NamedPipeMsg msg = new NamedPipeMsg
+            try
             {
-                MsgType = NamedPipeMsgType.UsbNotRegister_TrayHandle,
-                Usb = usbBase
-            };
-            _server.PushMessage(msg);
-        }
-
-        public void SendMsg_To_Tray_Close()
-        {
-            NamedPipeMsg msg = new NamedPipeMsg
+                NamedPipeMsg msg = new NamedPipeMsg
+                {
+                    MsgType = NamedPipeMsgType.ToCloseApp_USBFilterFormHandle
+                };
+                _server.PushMessage(msg);
+            }
+            catch (Exception)
             {
-                MsgType = NamedPipeMsgType.ToCloseProcess_TrayHandle
-            };
-            _server.PushMessage(msg);
+            }
         }
         #endregion
     }

@@ -18,12 +18,18 @@ namespace AgentLib
             set => SetRegKey(nameof(AgentHttpKey), value, RegistryValueKind.String);
         }
 
+        /// <summary>
+        /// C:\ProgramData\USBAdmin
+        /// </summary>
         public static string AgentDataDir
         {
             get => Environment.ExpandEnvironmentVariables(ReadRegKey(nameof(AgentDataDir)));
             set => SetRegKey(nameof(AgentDataDir), value, RegistryValueKind.String);
         }
 
+        /// <summary>
+        /// %ProgramFiles%\USBAdmin\UsbWhitelist.dat
+        /// </summary>
         public static string UsbWhitelistPath
         {
             get => Environment.ExpandEnvironmentVariables(ReadRegKey(nameof(UsbWhitelistPath)));
@@ -31,7 +37,7 @@ namespace AgentLib
         }
 
         /// <summary>
-        /// "USBAdminService.exe" full path
+        /// %ProgramFiles%\USBAdmin\USBAdminService.exe
         /// </summary>
         public static string USBAdminServicePath
         {
@@ -40,12 +46,21 @@ namespace AgentLib
         }
 
         /// <summary>
-        /// "USBAdminTray.exe" full path
+        /// %ProgramFiles%\USBAdmin\USBAdminTray.exe
         /// </summary>
         public static string USBAdminTrayPath
         {
             get => Environment.ExpandEnvironmentVariables(ReadRegKey(nameof(USBAdminTrayPath)));
             set => SetRegKey(nameof(USBAdminTrayPath), value, RegistryValueKind.String);
+        }
+
+        /// <summary>
+        /// %ProgramFiles%\USBAdmin\USBAdminFilter.exe
+        /// </summary>
+        public static string USBAdminFilterPath
+        {
+            get => Environment.ExpandEnvironmentVariables(ReadRegKey(nameof(USBAdminFilterPath)));
+            set => SetRegKey(nameof(USBAdminFilterPath), value, RegistryValueKind.String);
         }
 
 
@@ -82,6 +97,7 @@ namespace AgentLib
 
         //========== Url
 
+        
         public static string UsbWhitelistUrl
         {
             get => ReadRegKey(nameof(UsbWhitelistUrl));
@@ -140,8 +156,14 @@ namespace AgentLib
                 {
                     using (var subKey = hklm.OpenSubKey(_agentRegistryKey))
                     {
-                        var value = subKey.GetValue(name) as string;
-                        return value;
+                        var data = subKey.GetValue(name) as string;
+
+                        if (string.IsNullOrEmpty(data))
+                        {
+                            throw new Exception("data is NullOrEmpty.");
+                        }
+
+                        return data;
                     }
                 }
             }

@@ -7,45 +7,54 @@ namespace USBAdminTray
     public class TrayIcon
     {
 
-        private System.Windows.Forms.NotifyIcon _trayIcon;
+        private static System.Windows.Forms.NotifyIcon _TrayIcon;
 
         #region + public void Stop()
         public void Stop()
         {
-            if (_trayIcon != null)
+            App.Current.Dispatcher.Invoke(() =>
             {
-                _trayIcon.Visible = false;
-                _trayIcon.Dispose();
-                _trayIcon = null;
-            }
+                if (_TrayIcon != null)
+                {
+                    try
+                    {
+                        _TrayIcon.Visible = false;
+                        _TrayIcon.ContextMenuStrip?.Dispose();
+                        _TrayIcon.Icon?.Dispose();
+
+                        _TrayIcon?.Dispose();
+                        _TrayIcon = null;
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            });
         }
         #endregion
 
         #region + public void Start()
         public void Start()
         {
-#if DEBUG
-            //Debugger.Break();
-#endif
             try
             {
                 Stop();
 
-                _trayIcon = new System.Windows.Forms.NotifyIcon
+                _TrayIcon = new System.Windows.Forms.NotifyIcon
                 {
-                    Icon = Properties.Resources.USB,
+                    Icon = Properties.Resources.icon,
                     Text = "USBAdmin"
                 };
 
-                _trayIcon.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+                _TrayIcon.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
 
 
-                _trayIcon.ContextMenuStrip.Items.Add("Update Setting", null, UpdateSettingItem_Click);
-                _trayIcon.ContextMenuStrip.Items.Add("About", null, AboutItem_Click);
-                _trayIcon.ContextMenuStrip.Items.Add("Close", null, CloseTrayItem_Click);
-                _trayIcon.ContextMenuStrip.Items.Add("");
+                _TrayIcon.ContextMenuStrip.Items.Add("Update Setting", null, UpdateSettingItem_Click);
+                _TrayIcon.ContextMenuStrip.Items.Add("About", null, AboutItem_Click);
+                //_TrayIcon.ContextMenuStrip.Items.Add("Close", null, CloseTrayItem_Click);
+                _TrayIcon.ContextMenuStrip.Items.Add("");
 
-                _trayIcon.Visible = true;
+                _TrayIcon.Visible = true;
             }
             catch (Exception ex)
             {
@@ -109,6 +118,25 @@ namespace USBAdminTray
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+        #endregion
+
+        // BalloonTip
+        #region BalloonTip
+        public void ShowBalloonTip(string text)
+        {
+            try
+            {
+                if (_TrayIcon != null)
+                {
+                    _TrayIcon.BalloonTipText = text;
+                    _TrayIcon.BalloonTipTitle = "Notice:";
+                    _TrayIcon.ShowBalloonTip(10000); // 10s
+                }
+            }
+            catch (Exception)
+            {
             }
         }
         #endregion

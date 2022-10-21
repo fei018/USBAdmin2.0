@@ -23,6 +23,15 @@ namespace USBAdminTray
         public MainWindow()
         {
             InitializeComponent();
+
+            this.Closed += MainWindow_Closed;
+
+            ServerManage_Tray.Start();
+        }
+
+        private void MainWindow_Closed(object sender, EventArgs e)
+        {
+            ServerManage_Tray.Stop();
         }
     }
 }

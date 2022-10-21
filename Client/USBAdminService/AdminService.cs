@@ -20,19 +20,19 @@ namespace USBAdminService
 
         protected override void OnStart(string[] args)
         {
-            AdminServerManage.OnStart();
+            ServerManage_Service.OnStart();
         }
 
         protected override void OnStop()
         {
-            AdminServerManage.OnStop();
+            ServerManage_Service.OnStop();
         }
 
         protected override void OnSessionChange(SessionChangeDescription changeDescription)
         {
             if (changeDescription.Reason == SessionChangeReason.SessionLogon)
             {
-                AdminServerManage.TrayServer.CreateTray();
+                ServerManage_Service.TrayServer.CreateTray();
             }
 
             base.OnSessionChange(changeDescription);

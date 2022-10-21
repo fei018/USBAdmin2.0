@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace AgentLib
 {
+    [Serializable]
     public class NamedPipeMsg
     {
         public NamedPipeMsgType MsgType { get; set; }

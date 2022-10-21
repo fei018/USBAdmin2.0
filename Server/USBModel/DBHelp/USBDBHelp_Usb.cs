@@ -8,11 +8,14 @@ namespace USBModel
     public partial class USBDBHelp
     {
         // UsbRequest
+
         #region + public async Task<Tbl_UsbRequest> UsbRequest_Register(Tbl_UsbRequest usb)
         public async Task<Tbl_UsbRequest> UsbRequest_Register(Tbl_UsbRequest usb)
         {
             try
             {
+                usb.UsbIdentity = usb.GetUsbIdentity(); ;
+
                 var exist = await _db.Queryable<Tbl_UsbRequest>().FirstAsync(u => u.UsbIdentity == usb.UsbIdentity);
                 if (exist != null)
                 {

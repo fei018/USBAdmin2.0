@@ -15,6 +15,7 @@ namespace SetupClient
         {
             try
             {
+                Console.WriteLine(log);
                 File.AppendAllText(LogPath, log+"\r\n");
             }
             catch (Exception)

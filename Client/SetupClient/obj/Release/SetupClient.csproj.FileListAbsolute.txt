@@ -40,3 +40,7 @@ C:\CodeRepos\USBAdmin\publish\Agent\Setup.exe
 C:\CodeRepos\USBAdmin\Client\SetupClient\obj\Release\SetupClient.csproj.CoreCompileInputs.cache
 C:\CodeRepos\USBAdmin\Client\SetupClient\obj\Release\Setup.exe
 C:\CodeRepos\USBAdmin\Client\SetupClient\obj\Release\SetupClient.csproj.AssemblyReference.cache
+C:\CodeRepos\USBAdmin2.0\publish\Agent\Setup.exe
+C:\CodeRepos\USBAdmin2.0\Client\SetupClient\obj\Release\SetupClient.csproj.AssemblyReference.cache
+C:\CodeRepos\USBAdmin2.0\Client\SetupClient\obj\Release\SetupClient.csproj.CoreCompileInputs.cache
+C:\CodeRepos\USBAdmin2.0\Client\SetupClient\obj\Release\Setup.exe

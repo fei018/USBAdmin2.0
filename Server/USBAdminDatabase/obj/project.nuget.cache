@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "SKBgYZYNRZvT2ZYqNdQHx4AjItbkMWY8UIstMrJzLDmcBYYWVHN6V08hfNoh39lYs2NS/boz/Aw4HjG/SkUUSA==",
+  "dgSpecHash": "DirF8tWFCWRmYL1EQMHI6hGUH7PSPrtdTzO2hZeWHjXfpR7vU3PJXWr18xfKlgnuY/KDCDoHEFrwlTWnjSV0Jw==",
   "success": true,
-  "projectFilePath": "C:\\CodeRepos\\USBAdmin - test\\Server\\USBAdminDatabase\\USBAdminDatabase.csproj",
+  "projectFilePath": "C:\\CodeRepos\\USBAdmin2.0\\Server\\USBAdminDatabase\\USBAdminDatabase.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\e_fei\\.nuget\\packages\\bouncycastle.netcore\\1.8.3\\bouncycastle.netcore.1.8.3.nupkg.sha512",
     "C:\\Users\\e_fei\\.nuget\\packages\\google.protobuf\\3.6.1\\google.protobuf.3.6.1.nupkg.sha512",

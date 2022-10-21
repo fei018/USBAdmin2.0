@@ -63,16 +63,19 @@ namespace USBModel
         public string Pid_Hex => "0x_" + Pid.ToString("X").PadLeft(4, '0');
 
         [SugarColumn(IsIgnore = true)]
-        public string RequestTimeString => RequestTime.ToString("G");
+        public string RequestTimeString => RequestTime.ToString("yyyy-MM-dd HH:mm:ss");
 
         [SugarColumn(IsIgnore = true)]
-        public string RequestStateChangeTimeString => RequestStateChangeTime.ToString("G");
+        public string RequestStateChangeTimeString => RequestStateChangeTime.ToString("yyyy-MM-dd HH:mm:ss");
 
         public override string ToString()
         {
             return $"\r\nManufacturer: {Manufacturer}\r\nProduct: { Product}\r\nVid: {Vid_Hex}\r\nPid: {Pid_Hex}\r\nSerialNumber: {SerialNumber}\r\n";
         }
 
-        
+        public string GetUsbIdentity()
+        {
+            return (Vid.ToString() + Pid.ToString() + SerialNumber).ToLower();
+        }
     }
 }

@@ -3,6 +3,7 @@ using ToolsCommon;
 
 namespace AgentLib
 {
+    [Serializable]
     public class UsbBase : IUsbBase
     {
         public int Vid { get; set; }

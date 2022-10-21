@@ -134,18 +134,18 @@ namespace AgentLib
             try
             {
                 string path = diskPath.TrimStart('\\', '\\', '?', '\\');
-                var scope = new ManagementScope(@"\\.\ROOT\Microsoft\Windows\Storage");
-                var query = new ObjectQuery($"SELECT * FROM MSFT_Disk WHERE Path LIKE '%{path}'");
-                using (var searcher = new ManagementObjectSearcher(scope, query))
+                ManagementScope scope = new ManagementScope(@"\\.\ROOT\Microsoft\Windows\Storage");
+                ObjectQuery query = new ObjectQuery($"SELECT * FROM MSFT_Disk WHERE Path LIKE '%{path}'");
+                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query))
                 {
-                    using (var disks = searcher.Get())
+                    using (ManagementObjectCollection disks = searcher.Get())
                     {
                         foreach (ManagementObject d in disks)
                         {
-                            var result = Set_Disk_IsReadOnly_WMI(d, isReadOnly);
+                            string result = Set_Disk_IsReadOnly_WMI(d, isReadOnly);
                             if (!string.IsNullOrWhiteSpace(result) && result != "0")
                             {
-                                AgentLogger.Log(diskPath + "\r\n" + "Set ReadOnly result: \r\n" + result);
+                                AgentLogger.Log(diskPath + "\r\n" + "Set ReadOnly result:\r\n" + result);
                             }
                         }
                     }
@@ -153,7 +153,7 @@ namespace AgentLib
             }
             catch (Exception ex)
             {
-                throw new Exception("Set UsbDisk ReadOnly: " + ex.Message);
+                throw new Exception("UsbFilter.Set_Disk_IsReadOnly_by_DiskPath_WMI():\r\n" + ex.Message);
             }
         }
 
@@ -167,7 +167,7 @@ namespace AgentLib
 
             if (IsReadOnly != isReadOnly && !IsBoot && !IsSystem)
             {
-                var inParams = disk.GetMethodParameters("SetAttributes");
+                ManagementBaseObject inParams = disk.GetMethodParameters("SetAttributes");
                 inParams["IsReadOnly"] = isReadOnly;
                 return Convert.ToString(disk.InvokeMethod("SetAttributes", inParams, null)["ReturnValue"]);
             }

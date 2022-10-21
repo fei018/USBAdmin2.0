@@ -31,13 +31,14 @@ namespace USBAdminFilter
         {
             this.SuspendLayout();
             // 
-            // Form1
+            // USBFilterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(345, 98);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(217, 31);
+            this.Name = "USBFilterForm";
+            this.Text = "USBFilterForm";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.USBFilterForm_FormClosed);
             this.ResumeLayout(false);
 
         }

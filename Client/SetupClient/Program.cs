@@ -10,25 +10,29 @@ namespace SetupClient
         {
             try
             {
-                //if (args.Count() > 0)
-                //{
-                //    if (args[0].ToLower() == "uninstall")
-                //    {
-                //        UnSetup();
-                //    }
-                //}
-                //else
-                //{
-                //    Setup();
-                //}
+                _SetupHelp = new SetupHelp();
 
-                SetupRegistryKey.InitialRegistryKey();
+                _SetupHelp.TryUninstall_Old_HHITtools();
+
+                if (args.Count() > 0)
+                {
+                    if (args[0].ToLower() == "-uninstall")
+                    {
+                        UnSetup();
+                    }
+                }
+                else
+                {
+                    Setup();
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                LogHelp.Log(ex.Message);
             }
         }
+
+        private static SetupHelp _SetupHelp;
 
         static void Setup()
         {
@@ -37,15 +41,13 @@ namespace SetupClient
                 Console.WriteLine("Setup Start ...");
                 Console.WriteLine();
 
-                new SetupHelp().Setup();
+                _SetupHelp.Setup();
 
                 Console.WriteLine("Setup Done !!!");
                 LogHelp.Log("Setup done.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-
                 LogHelp.Log(ex.Message);
             }
         }
@@ -56,15 +58,13 @@ namespace SetupClient
             {
                 Console.WriteLine("UnSetup Start ...");
 
-                new SetupHelp().UnSetup();
+                _SetupHelp.UnSetup();
 
                 Console.WriteLine("UnSetup Done !!!");
                 LogHelp.Log("UnSetup done.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-
                 LogHelp.Log(ex.Message);
             }
         }

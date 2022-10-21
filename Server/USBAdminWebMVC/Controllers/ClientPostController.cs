@@ -56,7 +56,7 @@ namespace USBAdminWebMVC.Controllers
         }
         #endregion
 
-        // UsbHisory
+        // Usb Log
 
         #region PostUsbLog()
         [HttpPost]

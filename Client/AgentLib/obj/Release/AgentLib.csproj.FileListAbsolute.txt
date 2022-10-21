@@ -1,0 +1,8 @@
+C:\CodeRepos\USBAdmin2.0\Client\AgentLib\bin\Release\AgentLib.dll
+C:\CodeRepos\USBAdmin2.0\Client\AgentLib\bin\Release\Newtonsoft.Json.dll
+C:\CodeRepos\USBAdmin2.0\Client\AgentLib\bin\Release\ToolsCommon.dll
+C:\CodeRepos\USBAdmin2.0\Client\AgentLib\bin\Release\Newtonsoft.Json.xml
+C:\CodeRepos\USBAdmin2.0\Client\AgentLib\obj\Release\AgentLib.csproj.AssemblyReference.cache
+C:\CodeRepos\USBAdmin2.0\Client\AgentLib\obj\Release\AgentLib.csproj.CoreCompileInputs.cache
+C:\CodeRepos\USBAdmin2.0\Client\AgentLib\obj\Release\AgentLib.csproj.CopyComplete
+C:\CodeRepos\USBAdmin2.0\Client\AgentLib\obj\Release\AgentLib.dll

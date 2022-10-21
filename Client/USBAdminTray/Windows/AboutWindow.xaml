@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="USBAdmin" Height="300" Width="250" 
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
-        Closed="Window_Closed" Icon="USB.png">
+        Closed="Window_Closed" Icon="icon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -17,7 +17,7 @@
         <Canvas Grid.Row="1">
             <TextBlock Text="About USBAdmin" FontSize="14" Canvas.Left="10" Canvas.Top="10"/>
             <TextBlock Text="Version :" FontSize="14" Canvas.Left="10" Canvas.Top="38"/>
-            <Button x:Name="btnCheckUpdate" Click="btnCheckUpdate_Click" FontSize="14" Canvas.Left="10" Canvas.Top="67">Check Update</Button>
+            <!--<Button x:Name="btnCheckUpdate" Click="btnCheckUpdate_Click" FontSize="14" Canvas.Left="10" Canvas.Top="67">Check Update</Button>-->
             <TextBlock x:Name="txtAgentVersion" Text="?" FontSize="14" Canvas.Left="72" Canvas.Top="38"/>
             <TextBlock Text="Built by IT Dept" FontSize="14" Canvas.Left="125" Canvas.Top="105"/>
         </Canvas>

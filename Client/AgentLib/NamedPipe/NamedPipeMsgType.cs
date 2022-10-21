@@ -1,11 +1,16 @@
-﻿namespace AgentLib
+﻿using System;
+
+namespace AgentLib
 {
+    [Serializable]
     public enum NamedPipeMsgType
     {
-        Msg_TrayHandle = 10,
+        MsgBox_TrayHandle = 10,
+        BalloonTip_TrayHandle,
         UsbNotRegister_TrayHandle,
-        UpdateAgent_ServerHandle,
+        UsbNotRegister_ServerForward,
         UpdateSetting_ServerHandle,
-        ToCloseProcess_TrayHandle
+        ToCloseApp_TrayHandle,
+        ToCloseApp_USBFilterFormHandle
     }
 }

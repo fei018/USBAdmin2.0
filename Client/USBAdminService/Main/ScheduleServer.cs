@@ -8,80 +8,81 @@ namespace USBAdminService
     {
         private static Timer _Timer;
 
-        private void ElapsedAction(object sender, ElapsedEventArgs e)
+        private static double _Interval = 0;
+
+        private void TaskAction(object sender, ElapsedEventArgs e)
         {
+            #region PostComputerInfo
             try
             {
                 new AgentHttpHelp().PostComputerInfo();
             }
             catch (Exception ex)
             {
-                AgentLogger.Error("ServiceTimer.ElapsedAction(): " + ex.Message);
-            }
-
-            #region UsbFilterEnabled
-            try
-            {
-                if (AgentRegistry.UsbFilterEnabled)
-                {
-                    if (AdminServerManage.USBFilterServer == null)
-                    {
-                        AdminServerManage.USBFilterServer = new USBFilterServer();
-                        AdminServerManage.USBFilterServer.Start();
-                    }
-                }
-                else
-                {
-                    if (AdminServerManage.USBFilterServer != null)
-                    {
-                        AdminServerManage.USBFilterServer?.Stop();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                AgentLogger.Error("ServerSchedule.ElapsedAction(): " + ex.GetBaseException().Message);
-            }
-            #endregion
-
-            #region PrintJobLogEnabled
-            try
-            {
-                if (AgentRegistry.PrintJobLogEnabled)
-                {
-                    if (AdminServerManage.PrintJobLogServer == null)
-                    {
-                        AdminServerManage.PrintJobLogServer = new PrintJobLogServer();
-                        AdminServerManage.PrintJobLogServer.Start();
-                    }
-                }
-                else
-                {
-                    if (AdminServerManage.PrintJobLogServer != null)
-                    {
-                        AdminServerManage.PrintJobLogServer?.Stop();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                AgentLogger.Error("ServerSchedule.ElapsedAction(): " + ex.GetBaseException().Message);
+                AgentLogger.Error("ServiceTimer.TaskAction(): " + ex.Message);
             }
             #endregion
 
             #region Agent CheckAndUpdate 
             try
             {
-                AgentUpdate.CheckAndUpdate();
+                if (AgentUpdate.CheckNeedUpdate())
+                {
+                    new AgentUpdate().Update();
+                    return;
+                }
             }
             catch (Exception ex)
             {
-                AgentLogger.Error("ServerSchedule.ElapsedAction(): " + ex.GetBaseException().Message);
+                AgentLogger.Error("ServerSchedule.TaskAction(): " + ex.Message);
             }
             #endregion
 
-            #region _timerReset();
-            _timerReset();
+            #region update setting
+            try
+            {
+                var http = new AgentHttpHelp();
+                http.UpdateAgentRule();
+                http.UpdateUSBWhitelist();
+
+                if (AgentRegistry.UsbFilterEnabled)
+                {
+                    new UsbFilter().Scan_All_USBDisk_To_Filter();
+                }
+            }
+            catch (Exception ex)
+            {
+                AgentLogger.Error("ServerSchedule.TaskAction(): " + ex.Message);
+            }
+            #endregion
+
+            #region PrintJobLogServer
+            try
+            {
+                if (AgentRegistry.PrintJobLogEnabled)
+                {
+                    if (ServerManage_Service.PrintJobLogServer == null)
+                    {
+                        ServerManage_Service.PrintJobLogServer = new PrintJobLogServer();
+                        ServerManage_Service.PrintJobLogServer.Start();
+                    }
+                }
+                else
+                {
+                    if (ServerManage_Service.PrintJobLogServer != null)
+                    {
+                        ServerManage_Service.PrintJobLogServer?.Stop();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AgentLogger.Error("ServerSchedule.TaskAction(): " + ex.GetBaseException().Message);
+            }
+            #endregion
+
+            #region timer TryReset();
+            TryReset();
             #endregion
         }
 
@@ -89,16 +90,21 @@ namespace USBAdminService
         {
             try
             {
-                _Timer = new Timer();
-                _Timer.AutoReset = true;
-                _Timer.Interval = GetInterval();
-                _Timer.Elapsed += ElapsedAction;
+                _Timer = new Timer
+                {
+                    AutoReset = true,
+                    Interval = GetInterval()
+                };
 
-                _Timer.Start();
+                _Interval = _Timer.Interval;
+
+                _Timer.Elapsed += TaskAction;
+
+                _Timer.Start();               
             }
             catch (Exception ex)
             {
-                AgentLogger.Error("ServerSchedule.Start(): " + ex.GetBaseException().Message);
+                AgentLogger.Error("ServerSchedule.Start(): " + ex.Message);
             }
         }
 
@@ -108,7 +114,7 @@ namespace USBAdminService
             {
                 try
                 {
-                    _Timer.Elapsed -= ElapsedAction;
+                    _Timer.Elapsed -= TaskAction;
                     _Timer.Stop();
                 }
                 catch (Exception)
@@ -117,21 +123,8 @@ namespace USBAdminService
             }
         }
 
-        private void _timerReset()
-        {
-            try
-            {
-                _Timer.Enabled = false;
-                _Timer.Interval = GetInterval();
-                _Timer.Enabled = true;
-            }
-            catch (Exception)
-            {
-            }
-        }
-
         #region + private double GetInterval()
-        private double GetInterval()
+        private static double GetInterval()
         {
             int minutes;
 
@@ -144,19 +137,37 @@ namespace USBAdminService
                 return TimeSpan.FromMinutes(10).TotalMilliseconds;
             }
 
-            // minimum 1 minutes
-            if (minutes < 1)
+            // minimum 2 minutes
+            if (minutes < 2)
             {
-                minutes = 1;
+                minutes = 2;
             }
 
-            // maximum 24 hours
-            if (minutes > 1440)
+            // maximum 1 hours
+            if (minutes > 60)
             {
-                minutes = 1440;
+                minutes = 60;
             }
 
             return TimeSpan.FromMinutes(minutes).TotalMilliseconds; ;
+        }
+        #endregion
+
+        #region + private void TryReset()
+        private void TryReset()
+        {
+            try
+            {
+                if (_Interval != GetInterval())
+                {
+                    ServerManage_Service.ScheduleServer?.Stop();
+                    ServerManage_Service.ScheduleServer?.Start();
+                }
+            }
+            catch (Exception ex)
+            {
+                AgentLogger.Error("ServerSchedule.Reset(): " + ex.Message);
+            }
         }
         #endregion
     }

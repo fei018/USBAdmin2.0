@@ -8,30 +8,38 @@ namespace SetupClient
     {
         static Dictionary<string, string> Get_USBAdminKeys()
         {
-            var keys = new Dictionary<string, string>()
+            try
             {
-                {"AgentDataDir",@"%ProgramData%\USBAdmin"},
-                {"UsbWhitelistPath",@"%ProgramFiles%\USBAdmin\UsbWhitelist.dat"},
-                {"USBAdminServicePath",@"%ProgramFiles%\USBAdmin\USBAdminService.exe"},
-                {"USBAdminTrayPath",@"%ProgramFiles%\USBAdmin\USBAdminTray.exe"},
-                {"UsbFilterEnabled","false"},
-                {"UsbLogEnabled","true"},
-                {"PrintJobLogEnabled","false"},
-                {"AgentTimerMinute","10"},
-                {"AgentHttpKey","usbb50ae7e95f144874a2739e119e8791e1"},
-                {"UsbWhitelistUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientGet/UsbWhitelist"},
-                {"AgentConfigUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientGet/AgentConfig"},
-                {"AgentRuleUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientGet/AgentRule"},
-                {"AgentUpdateUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientGet/AgentUpdate"},
-                {"PostUsbRequestUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientPost/PostUsbRequest"},
-                {"PostComputerInfoUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientPost/PostComputerInfo"},
-                {"PostUsbLogUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientPost/PostUsbLog"},
-                {"PostPrintJobLogUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientPost/PostPrintJobLog"}
-            };
+                var keys = new Dictionary<string, string>()
+                {
+                    {"AgentDataDir",@"%ProgramData%\USBAdmin"},
+                    {"UsbWhitelistPath",@"%ProgramFiles%\USBAdmin\UsbWhitelist.dat"},
+                    {"USBAdminServicePath",@"%ProgramFiles%\USBAdmin\USBAdminService.exe"},
+                    {"USBAdminTrayPath",@"%ProgramFiles%\USBAdmin\USBAdminTray.exe"},
+                    {"USBAdminFilterPath",@"%ProgramFiles%\USBAdmin\USBAdminFilter.exe"},
+                    {"UsbFilterEnabled","false"},
+                    {"UsbLogEnabled","false"},
+                    {"PrintJobLogEnabled","false"},
+                    {"AgentTimerMinute","10"},
+                    {"AgentHttpKey","usbb50ae7e95f144874a2739e119e8791e1"},
+                    {"UsbWhitelistUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientGet/UsbWhitelist"},
+                    {"AgentConfigUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientGet/AgentConfig"},
+                    {"AgentRuleUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientGet/AgentRule"},
+                    {"AgentUpdateUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientGet/AgentUpdate"},
+                    {"PostUsbRequestUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientPost/PostUsbRequest"},
+                    {"PostComputerInfoUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientPost/PostComputerInfo"},
+                    {"PostUsbLogUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientPost/PostUsbLog"},
+                    {"PostPrintJobLogUrl","http://hhdmstest02.hiphing.com.hk/USBAdmin/ClientPost/PostPrintJobLog"}
+                };
 
-            keys.Add("AgentVersion", "1.0.19");
+                keys.Add("AgentVersion", "2.0.1");
 
-            return keys;
+                return keys;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("SetupRegistryKey.Get_USBAdminKeys(): " + ex.Message);
+            }
         }
 
 
@@ -65,5 +73,23 @@ namespace SetupClient
             }
         }
         #endregion
+
+        public static void DeleteRegKey_HHITtools()
+        {
+            string key = "SOFTWARE\\HipHing\\HHITtools";
+
+            try
+            {
+                using (RegistryKey hklm = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
+                {
+                    // delete old key
+                    hklm.DeleteSubKey(key, false);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

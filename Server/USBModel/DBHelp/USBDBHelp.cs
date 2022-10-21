@@ -124,9 +124,10 @@ namespace USBModel
                 // UsbIdentity encode to Base64                   
                 foreach (var u in query)
                 {
-                    whitelist.AppendLine(UtilityTools.Base64Encode(u.UsbIdentity));
+                    whitelist.AppendLine(u.UsbIdentity);
                 }
-                return whitelist.ToString();
+
+                return UtilityTools.Base64Encode(whitelist.ToString());
             }
             catch (Exception)
             {

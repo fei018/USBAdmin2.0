@@ -2,6 +2,7 @@
 
 namespace AgentLib
 {
+    [Serializable]
     public class UsbDisk : UsbBase
     {
         public string DiskDeviceId { get; set; }

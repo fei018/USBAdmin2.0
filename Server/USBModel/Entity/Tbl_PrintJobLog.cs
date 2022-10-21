@@ -29,6 +29,6 @@ namespace USBModel
         //IsIgnore
 
         [SugarColumn(IsIgnore = true)]
-        public string PrintingTimeString => PrintingTime.ToString("G");
+        public string PrintingTimeString => PrintingTime.ToString("yyyy-MM-dd HH:mm:ss");
     }
 }

@@ -8,7 +8,7 @@ namespace AgentLib
 {
     public class AgentUpdate
     {
-        // C:\ProgramData\HHITtools
+        // C:\ProgramData\USBAdmin
         private string _baseDir;
 
         private string _downloadDir;
@@ -17,39 +17,36 @@ namespace AgentLib
 
         private string _zipFile;
 
+        private static bool _IsUpdating = false;
+
         public AgentUpdate()
         {
-            _baseDir = Environment.ExpandEnvironmentVariables(@"%ProgramData%\HHITtools");
+            try
+            {
+                _baseDir = AgentRegistry.AgentDataDir;
 
-            _downloadDir = Path.Combine(_baseDir, "download");
+                _downloadDir = Path.Combine(_baseDir, "download");
 
-            _setupExe = Path.Combine(_downloadDir, "Setup.exe");
+                _setupExe = Path.Combine(_downloadDir, "Setup.exe");
 
-            _zipFile = Path.Combine(_downloadDir, "Release.zip");
+                _zipFile = Path.Combine(_downloadDir, "Release.zip");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("public AgentUpdate(): " + ex.GetBaseException().Message);
+            }
         }
 
-        #region + public static void CheckAndUpdate()
-        public static void CheckAndUpdate()
+        #region + public static bool CheckNeedUpdate()
+        public static bool CheckNeedUpdate()
         {
             try
             {
-                if (new AgentUpdate().CheckNeedUpdate())
+                if (_IsUpdating)
                 {
-                    new AgentUpdate().Update();
+                    return false;
                 }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-        #endregion
 
-        #region + public bool CheckNeedUpdate()
-        public bool CheckNeedUpdate()
-        {
-            try
-            {
                 var agentResult = AgentHttpHelp.HttpClient_Get(AgentRegistry.AgentConfigUrl);
 
                 string newVersion = agentResult.AgentConfig.AgentVersion;
@@ -68,8 +65,8 @@ namespace AgentLib
             }
             catch (Exception ex)
             {
-                AgentLogger.Error(ex.GetBaseException().Message);
-                throw;
+                AgentLogger.Error("AgentUpdate.CheckNeedUpdate(): " + ex.Message);
+                return false;
             }
         }
         #endregion
@@ -79,23 +76,28 @@ namespace AgentLib
         {
             try
             {
+                _IsUpdating = true;
+
                 CleanDownloadDir();
 
                 DownloadFile();
 
                 if (File.Exists(_setupExe))
                 {
-                    Process.Start(_setupExe);
+                    Process proc = Process.Start(_setupExe);
                 }
                 else
                 {
-                    throw new Exception("AgentUpdate.Update(): setup.exe download failed.");
+                    throw new Exception("setup.exe download failed.");
                 }
             }
             catch (Exception ex)
             {
-                AgentLogger.Error(ex.Message);
-                throw;
+                throw new Exception("AgentUpdate.Update(): " + ex.Message);
+            }
+            finally
+            {
+                _IsUpdating = false;
             }
         }
         #endregion

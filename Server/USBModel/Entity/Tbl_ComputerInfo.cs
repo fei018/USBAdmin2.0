@@ -36,7 +36,7 @@ namespace USBModel
         // IsIgnore
 
         [SugarColumn(IsIgnore = true)]
-        public string LastSeenString => LastSeen.ToString("G");
+        public string LastSeenString => LastSeen.ToString("yyyy-MM-dd HH:mm:ss");
 
         public override string ToString()
         {

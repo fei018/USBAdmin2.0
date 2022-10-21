@@ -15,15 +15,15 @@ namespace AgentLib
 
         // Filter usb
 
-        #region + public void Filter_UsbDevice_Class_By_UsbDisk_By_DriveLetter(char driveLetter)
-        public void Filter_UsbDevice_Class_By_UsbDisk_By_DriveLetter(char driveLetter)
+        #region + public void Filter_UsbDisk_By_DriveLetter(char driveLetter)
+        public void Filter_UsbDisk_By_DriveLetter(char driveLetter)
         {
             try
             {
                 var usb = Get_UsbDisk_DiskPath_by_DriveLetter_WMI(driveLetter);
                 if (usb != null)
                 {
-                    Filter_UsbDevice_Class_Is_UsbDisk_By_DiskPath(usb.DiskPath);
+                    Filter_UsbDisk_By_DiskPath(usb.DiskPath);
                 }
                 else
                 {
@@ -37,11 +37,11 @@ namespace AgentLib
         }
         #endregion
 
-        #region + public viod Filter_UsbDevice_Class_Is_UsbDisk_By_DiskPath(string diskPath)
+        #region + public viod Filter_UsbDisk_By_DiskPath(string diskPath)
         /// <summary>
         /// 
         /// </summary>
-        public void Filter_UsbDevice_Class_Is_UsbDisk_By_DiskPath(string diskPath)
+        public void Filter_UsbDisk_By_DiskPath(string diskPath)
         {
             try
             {
@@ -57,13 +57,13 @@ namespace AgentLib
                 {
                     // 找不到 大多數係 非 USB device
                     throw new Exception ("Filter_UsbDevice_Class_Is_UsbDisk_By_DiskPath():\r\n" + usb.ToString());
-                }            
+                }
 
                 if (!_usbBus.Fill_USB_Info_By_USBDeviceId(usb))
                 {
                     // should not happen
                     // set readonly true
-                    Set_Disk_IsReadOnly_by_DiskPath_WMI(usb.DiskPath, true);
+                    //Set_Disk_IsReadOnly_by_DiskPath_WMI(usb.DiskPath, true);
                     return;
                 }
 
@@ -75,9 +75,10 @@ namespace AgentLib
                 }
                 else
                 {
+                    UsbDeviceNotRegister?.Invoke(null, usb);
+
                     // set readonly true
                     Set_Disk_IsReadOnly_by_DiskPath_WMI(usb.DiskPath, true);
-                    UsbDeviceNotRegister?.Invoke(null, usb);
                     return;
                 }
             }
@@ -103,7 +104,7 @@ namespace AgentLib
                     {
                         try
                         {
-                            Filter_UsbDevice_Class_Is_UsbDisk_By_DiskPath(usb.DiskPath);
+                            Filter_UsbDisk_By_DiskPath(usb.DiskPath);
                         }
                         catch (Exception ex)
                         {

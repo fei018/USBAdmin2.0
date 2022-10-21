@@ -8,35 +8,6 @@ namespace AgentLib
     {
         private const int _timeoutMillisecond = 2000;
 
-
-        #region + public void CloseOrKillProcess(Process)
-        public static void CloseOrKillProcess(Process process)
-        {
-            if (process == null)
-            {
-                return;
-            }
-
-            try
-            {
-                if (process.HasExited)
-                {
-                    return;
-                }
-
-                process.CloseMainWindow();
-                if (!process.WaitForExit(_timeoutMillisecond))
-                {
-                    process.Kill();
-                    process.Close();
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-        #endregion
-
         // static function
 
         #region + public static Process StartupApp(string appFullPath, string userName=null)

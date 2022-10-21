@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
@@ -52,8 +53,11 @@ namespace SetupClient
 
                 UninstallService();
 
+                TryCloseProcess();
+
                 CreateNewAppDir();
-                CheckNewDataDir();
+
+                TryCreateNewDataDir();
 
                 CopyDllFile();
 
@@ -68,7 +72,9 @@ namespace SetupClient
         }
         #endregion
 
-        #region + private void CreateNewAppDir()
+
+
+        #region CreateNewAppDir()
         private void CreateNewAppDir()
         {
             // _newAppDir
@@ -85,10 +91,10 @@ namespace SetupClient
                 dir.Create();
             }
 
-            if (!dir.Exists)
-            {
-                throw new Exception("Error: " + dir.FullName + " create failed.");
-            }
+            //if (!dir.Exists)
+            //{
+            //    throw new Exception("Error: " + dir.FullName + " create failed.");
+            //}
 
             // 設置權限
             try
@@ -110,8 +116,8 @@ namespace SetupClient
         }
         #endregion
 
-        #region + CheckNewDataDir()
-        private void CheckNewDataDir()
+        #region + TryCreateNewDataDir()
+        private void TryCreateNewDataDir()
         {
             var rule = new FileSystemAccessRule("Authenticated Users",
                                 FileSystemRights.Modify,
@@ -143,27 +149,26 @@ namespace SetupClient
         #region + private bool InstallService()
         private void InstallService()
         {
-            WinServiceHelper.Install(_serviceName, null, _serviceExe, null, ServiceStartType.Auto);
+            WinServiceHelper.Install(_serviceName, null, _serviceExe, null, ServiceStartType.Auto, ServiceAccount.LocalSystem);
 
             //service
 
-            var serviceExist = ServiceController.GetServices().Any(s => s.ServiceName.ToLower() == _serviceName.ToLower());
+            bool serviceExist = ServiceController.GetServices().Any(s => s.ServiceName.ToLower() == _serviceName.ToLower());
             if (!serviceExist)
             {
-                throw new Exception("SetupHelp.InstallService() error: Service not exist.");
+                throw new Exception("Error: SetupHelp.InstallService(): Service not exist.");
             }
 
-            using (var serv = new ServiceController(_serviceName))
+            using (ServiceController serv = new ServiceController(_serviceName))
             {
                 if (serv.Status == ServiceControllerStatus.Stopped)
                 {
                     serv.Start();
 
-                    serv.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(20));
+                    serv.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(60));
                 }
             }
 
-            Console.WriteLine("Install service done.");
             LogHelp.Log("Install service done.");
         }
         #endregion
@@ -177,12 +182,57 @@ namespace SetupClient
                 return;
             }
 
-            Console.WriteLine("Unistall serive start...");
+            LogHelp.Log("Unistall serive start...");
+
+            ServiceController sc = new ServiceController(_serviceName);
+            if (sc.CanStop)
+            {
+                sc.Stop();
+                sc.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromMinutes(5));
+            }
 
             WinServiceHelper.Uninstall(_serviceName);
 
-            Console.WriteLine("Unistall serivce done.");
             LogHelp.Log("Unistall serivce done.");
+        }
+        #endregion
+
+        #region TryCloseProcess()
+        private void TryCloseProcess()
+        {
+            Thread.Sleep(2000);
+
+            try
+            {
+                Process[] procs = Process.GetProcessesByName("USBAdminFilter");
+                if (procs.Length >= 1)
+                {
+                    foreach (Process p in procs)
+                    {
+                        p?.Kill();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            try
+            {
+                Process[] procs = Process.GetProcessesByName("USBAdminTray");
+                if (procs.Length >= 1)
+                {
+                    foreach (Process p in procs)
+                    {
+                        p?.Kill();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            Thread.Sleep(2000);
         }
         #endregion
 
@@ -210,11 +260,9 @@ namespace SetupClient
                 LogHelp.Log(ex.Message);
             }
 
-            Console.WriteLine("Write batch file done.");
             LogHelp.Log("Write batch file done.");
         }
         #endregion
-
 
         #region + private void CopyDllFile()
         private void CopyDllFile()
@@ -231,7 +279,6 @@ namespace SetupClient
                 file.CopyTo(destName, true);
             }
 
-            Console.WriteLine("Copy dll files done.");
             LogHelp.Log("Copy dll files done.");
         }
         #endregion
@@ -267,6 +314,34 @@ namespace SetupClient
             catch (Exception)
             {
                 throw;
+            }
+        }
+        #endregion
+
+        #region TryUninstall_Old_HHITtools()
+        public void TryUninstall_Old_HHITtools()
+        {
+            try
+            {
+                string dir = Environment.ExpandEnvironmentVariables(@"%ProgramFiles%\HHITtools");
+                string bat = Path.Combine(dir, "Service_Uninstall.bat");
+
+                if (File.Exists(bat))
+                {
+                    LogHelp.Log("Uninstall old HHITtools.");
+
+                    Process proc = Process.Start(bat);
+
+                    proc.WaitForExit();
+
+                    Directory.Delete(dir, true);
+
+                    SetupRegistryKey.DeleteRegKey_HHITtools();
+                }              
+            }
+            catch (Exception ex)
+            {
+                LogHelp.Log(ex.Message);
             }
         }
         #endregion

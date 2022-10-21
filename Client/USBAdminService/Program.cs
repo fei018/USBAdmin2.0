@@ -14,20 +14,20 @@ namespace USBAdminService
         /// </summary>
         static void Main()
         {
-            //ServiceBase[] ServicesToRun;
-            //ServicesToRun = new ServiceBase[]
-            //{
-            //    new AdminService()
-            //};
-            //ServiceBase.Run(ServicesToRun);
+            ServiceBase[] ServicesToRun;
+            ServicesToRun = new ServiceBase[]
+            {
+                new AdminService()
+            };
+            ServiceBase.Run(ServicesToRun);
 
-            AdminServerManage.OnStart();
-            Console.WriteLine("Start...");
+            //ServerManage_Service.OnStart();
+            //Console.WriteLine("Start...");
 
-            Console.ReadLine();
+            //Console.ReadLine();
 
-            AdminServerManage.OnStop();
-            Console.WriteLine("Stop...");
+            //ServerManage_Service.OnStop();
+            //Console.WriteLine("Stop...");
         }
     }
 }

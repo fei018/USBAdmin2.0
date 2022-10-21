@@ -192,7 +192,7 @@ namespace USBAdminWebMVC.Controllers
 
                 //ViewBag.OK = "Delete Succeed.";
 
-                return Ok();
+                return Content("Delete Succeed.");
             }
             catch (Exception)
             {

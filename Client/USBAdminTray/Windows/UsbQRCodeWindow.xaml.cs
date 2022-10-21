@@ -11,6 +11,8 @@ namespace USBAdminTray
         public UsbQRCodeWindow()
         {
             InitializeComponent();
+
+            ShowWinLocationRightBottom();
         }
 
         /// <summary>
@@ -30,13 +32,6 @@ namespace USBAdminTray
             txtVid.Text = usb.Vid.ToString();
             txtPid.Text = usb.Pid.ToString();
             txtSerial.Text = usb.SerialNumber;
-
-            //StringBuilder sb = new StringBuilder();
-            //sb.AppendLine("Manufacturer: " + usbDisk.Manufacturer);
-            //sb.AppendLine("Product: " + usbDisk.Product);
-            //sb.AppendLine("Vid: " + usbDisk.Vid.ToString());
-            //sb.AppendLine("Pid: " + usbDisk.Pid.ToString());
-            //sb.AppendLine("SerialNumber: " + usbDisk.SerialNumber);
 
             string qrText = $"Manufacturer:{usb.Manufacturer}|Product:{usb.Product}|Vid:{usb.Vid}|Pid:{usb.Pid}|SerialNumber:{usb.SerialNumber}";
 

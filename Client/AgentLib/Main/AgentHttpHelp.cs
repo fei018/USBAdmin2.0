@@ -166,8 +166,8 @@ namespace AgentLib
         }
         #endregion
 
-        #region + public void GetAgentRule()
-        public void GetAgentRule()
+        #region + public void UpdateAgentRule()
+        public void UpdateAgentRule()
         {
             try
             {

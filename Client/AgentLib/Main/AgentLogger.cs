@@ -10,12 +10,24 @@ namespace AgentLib
 {
     public class AgentLogger
     {
-        private static readonly string _baseDir = AgentRegistry.AgentDataDir;
+        private static readonly string _baseDir = GetLogDir();
 
 
         private static string LogPath => Path.Combine(_baseDir, "log.txt");
 
         private static string ErrorPath => Path.Combine(_baseDir, "error.txt");
+
+        private static string GetLogDir()
+        {
+            try
+            {
+                return AgentRegistry.AgentDataDir;
+            }
+            catch (Exception)
+            {
+                return Environment.ExpandEnvironmentVariables("%ProgramData%\\USBAdmin");
+            }
+        }
 
         public static void Log(string log)
         {
@@ -39,18 +51,6 @@ namespace AgentLib
 
             Task.Run(() =>
             {
-                //lock (_locker)
-                //{
-                //    try
-                //    {
-                //        var l = Environment.NewLine + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + Environment.NewLine + log + Environment.NewLine;
-                //        File.AppendAllText(path, l);
-                //    }
-                //    catch (Exception)
-                //    {
-                //    }
-                //}
-
                 // lock multi process write one file
                 Mutex mutex = null;
                 try

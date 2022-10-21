@@ -14,20 +14,51 @@ namespace USBAdminFilter
 {
     public partial class USBFilterForm : UsbMonitorForm
     {
+        public static USBFilterForm USBFilterForm_App { get; private set; }
+
         public USBFilterForm()
         {
             InitializeComponent();
+#if DEBUG
+            Visible = true;
+            ShowInTaskbar = true;
+#else
+            Visible = false;
+            ShowInTaskbar = false;
+#endif
+
+            OnStart();
+        }
+
+        private UsbFilter _usbFilter;
+        private NamedPipeClient_Filter _namedPipeClient_Filter;
+
+        private void OnStart()
+        {
+            USBFilterForm_App = this;
+
+            _namedPipeClient_Filter = new NamedPipeClient_Filter();
+            _namedPipeClient_Filter.Start();
 
             _usbFilter = new UsbFilter();
             _usbFilter.UsbDeviceNotRegister += _usbFilter_UsbDeviceNotRegister;
         }
 
-        private UsbFilter _usbFilter;
+        private void USBFilterForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            _usbFilter.UsbDeviceNotRegister -= _usbFilter_UsbDeviceNotRegister;
+
+            _namedPipeClient_Filter.Stop();
+        }
 
         private void _usbFilter_UsbDeviceNotRegister(object sender, UsbBase e)
         {
             // send message to tray
+            _namedPipeClient_Filter?.SendMsg_To_ServerForward_UsbNotRegister(e);
         }
+
+        #region OnUsbInterface
+        private static readonly object _Locker = new object();
 
         public override void OnUsbInterface(UsbEventDeviceInterfaceArgs args)
         {
@@ -35,32 +66,32 @@ namespace USBAdminFilter
             {
                 if (args.DeviceInterface == UsbMonitor.UsbDeviceInterface.Disk)
                 {
-                    When_UsbDisk_Arrival(args.Name);
+                    Task.Factory.StartNew(() =>
+                    {
+                        try
+                        {
+                            lock (_Locker)
+                            {
+                                _usbFilter.Filter_UsbDisk_By_DiskPath(args.Name);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+
+                        try
+                        {
+                            // post usb log to http server
+                            new AgentHttpHelp().PostUsbLog_byDisk(args.Name);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    });
                 }
             }
         }
+        #endregion
 
-        private void When_UsbDisk_Arrival(string diskPath)
-        {
-            Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    _usbFilter.Filter_UsbDevice_Class_Is_UsbDisk_By_DiskPath(diskPath);
-                }
-                catch (Exception)
-                {
-                }
-
-                try
-                {
-                    // post usb log to http server
-                    new AgentHttpHelp().PostUsbLog_byDisk(diskPath);
-                }
-                catch (Exception)
-                {
-                }
-            });
-        }
     }
 }

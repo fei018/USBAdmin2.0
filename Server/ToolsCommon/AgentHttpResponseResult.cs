@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ToolsCommon
+﻿namespace ToolsCommon
 {
     public class AgentHttpResponseResult
     {
@@ -20,7 +18,7 @@ namespace ToolsCommon
 
         public string UsbWhitelist { get; set; }
 
-        public string DownloadFileBase64 { get; set; }  
-        
+        public string DownloadFileBase64 { get; set; }
+
     }
 }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bXHy0pWaNZKPtkJPsYHS7fwfKQvSVf7e8+MpDNTSJt9hCcpLQgXb9XPXSokJQdZM1rEpU9Z/uQNnV5N7g55/nw==",
+  "dgSpecHash": "hPuX6Ji6J6JFU+h57GcD1qgCNA9L81cxcR3bfMKXurrvl9LMkaX/4GxhxnSAuhIoRM6jjJ3SajT9sEctfNxxMw==",
   "success": true,
-  "projectFilePath": "C:\\CodeRepos\\USBAdmin - test\\Server\\LoginUserManager\\LoginUserManager.csproj",
+  "projectFilePath": "C:\\CodeRepos\\USBAdmin2.0\\Server\\LoginUserManager\\LoginUserManager.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\e_fei\\.nuget\\packages\\bouncycastle.netcore\\1.8.3\\bouncycastle.netcore.1.8.3.nupkg.sha512",
     "C:\\Users\\e_fei\\.nuget\\packages\\google.protobuf\\3.6.1\\google.protobuf.3.6.1.nupkg.sha512",

@@ -110,8 +110,9 @@
                 let url = $(id).attr('action');
                 let data = $(id).serializeArray();
 
-                $.post(url, data, function (json) {
-                    loadingToReloadPage(2);
+                $.post(url, data, function (text) {
+                    //loadingToReloadPage(2);
+                    document.body.innerHTML = text;
                 });
 
                 layer.close(index);

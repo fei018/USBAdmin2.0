@@ -12,9 +12,11 @@ namespace AgentLib
     {
         private static string _UsbWhitelistFile;
 
-        private static HashSet<string> CacheDb { get; set; }
+        private static List<string> _CacheDb;
 
-        private static readonly object _locker_CacheDb = new object();
+        private static readonly object _Locker_CacheDb = new object();
+
+        private static readonly object _Locker_Whitelist = new object();
 
         public UsbWhitelist()
         {
@@ -35,24 +37,29 @@ namespace AgentLib
             {
                 var table = ReadFile_UsbWhitelist();
 
-                var cache = new HashSet<string>();
-
-                foreach (var line in table)
+                lock (_Locker_CacheDb)
                 {
-                    try
+                    if (_CacheDb == null)
                     {
-                        if (!string.IsNullOrWhiteSpace(line))
-                        {
-                            var data = UtilityTools.Base64Decode(line.Trim());
-                            cache.Add(data);
-                        }
+                        _CacheDb = new List<string>(table.Length);
                     }
-                    catch (Exception) { }
-                }
+                    else
+                    {
+                        _CacheDb.Clear();
+                        _CacheDb.Capacity = table.Length;
+                    }
 
-                lock (_locker_CacheDb)
-                {
-                    CacheDb = cache;
+                    foreach (string line in table)
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrWhiteSpace(line))
+                            {
+                                _CacheDb.Add(line);
+                            }
+                        }
+                        catch (Exception) { throw; }
+                    }
                 }
             }
             catch (Exception)
@@ -63,10 +70,10 @@ namespace AgentLib
         #endregion
 
         #region + private string[] ReadFile_UsbWhitelist()
-        private static readonly object _locker_UsbWhitelist = new object();
+
         private string[] ReadFile_UsbWhitelist()
         {
-            lock (_locker_UsbWhitelist)
+            lock (_Locker_Whitelist)
             {
                 try
                 {
@@ -76,7 +83,7 @@ namespace AgentLib
                     }
                     else
                     {
-                        throw new Exception("USB Whitelist File not exist.");
+                        throw new Exception(_UsbWhitelistFile + " not exist.");
                     }
                 }
                 catch (Exception)
@@ -90,7 +97,7 @@ namespace AgentLib
         #region + private void WriteFile_UsbWhitelist(string txt)
         private void WriteFile_UsbWhitelist(string txt)
         {
-            lock (_locker_UsbWhitelist)
+            lock (_Locker_Whitelist)
             {
                 try
                 {
@@ -98,27 +105,38 @@ namespace AgentLib
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Write down USB Whitelist Error:\r\n" + ex.GetBaseException().Message);
+                    throw new Exception(_UsbWhitelistFile + "\r\nWrite file Error:\r\n" + ex.GetBaseException().Message);
                 }
             }
         }
         #endregion
 
-        #region + public static bool IsFind(UsbDisk usb)
-        public static bool IsFind(UsbDisk usb)
+        #region + public static bool IsFind(UsbBase usb)
+        public static bool IsFind(UsbBase usb)
         {
             try
             {
-                if (CacheDb == null || CacheDb.Count <= 0)
-                {
-                    new UsbWhitelist().Reload_UsbWhitelistCache();
-                }
+                //if (_CacheDb == null || _CacheDb.Count <= 0)
+                //{
+                //    new UsbWhitelist().Reload_UsbWhitelistCache();
+                //}
 
-                if (CacheDb != null && CacheDb.Count > 0)
+                //if (_CacheDb != null && _CacheDb.Count >= 1)
+                //{
+                //    if(_CacheDb.Any(c=> c.Equals(usb.UsbIdentity)))
+                //    {
+                //        return true;
+                //    }
+                //}
+
+                UsbWhitelist whiteList = new UsbWhitelist();
+                string[] table = whiteList.ReadFile_UsbWhitelist();
+
+                if (table.Length >= 1)
                 {
-                    foreach (var t in CacheDb)
+                    foreach (string t in table)
                     {
-                        if (t.ToLower() == usb.UsbIdentity)
+                        if (t.Equals(usb.UsbIdentity))
                         {
                             return true;
                         }
@@ -129,7 +147,7 @@ namespace AgentLib
             }
             catch (Exception ex)
             {
-                AgentLogger.Error(ex.GetBaseException().Message);
+                AgentLogger.Error(ex.Message);
                 return false;
             }
         }
@@ -140,9 +158,9 @@ namespace AgentLib
         {
             try
             {
-                new UsbWhitelist().WriteFile_UsbWhitelist(usbWhitelist);
-
-                new UsbWhitelist().Reload_UsbWhitelistCache();
+                UsbWhitelist white = new UsbWhitelist();
+                white.WriteFile_UsbWhitelist(UtilityTools.Base64Decode(usbWhitelist));
+                white.Reload_UsbWhitelistCache();
             }
             catch (Exception)
             {
