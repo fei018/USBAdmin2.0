@@ -6,3 +6,11 @@ C:\CodeRepos\USBAdmin2.0\Client\AgentLib\obj\Release\AgentLib.csproj.AssemblyRef
 C:\CodeRepos\USBAdmin2.0\Client\AgentLib\obj\Release\AgentLib.csproj.CoreCompileInputs.cache
 C:\CodeRepos\USBAdmin2.0\Client\AgentLib\obj\Release\AgentLib.csproj.CopyComplete
 C:\CodeRepos\USBAdmin2.0\Client\AgentLib\obj\Release\AgentLib.dll
+C:\Code\GitHub\USBAdmin2.0\Client\AgentLib\obj\Release\AgentLib.csproj.AssemblyReference.cache
+C:\Code\GitHub\USBAdmin2.0\Client\AgentLib\obj\Release\AgentLib.csproj.CoreCompileInputs.cache
+C:\Code\GitHub\USBAdmin2.0\Client\AgentLib\obj\Release\AgentLib.dll
+C:\Code\GitHub\USBAdmin2.0\Client\AgentLib\bin\Release\AgentLib.dll
+C:\Code\GitHub\USBAdmin2.0\Client\AgentLib\bin\Release\Newtonsoft.Json.dll
+C:\Code\GitHub\USBAdmin2.0\Client\AgentLib\bin\Release\ToolsCommon.dll
+C:\Code\GitHub\USBAdmin2.0\Client\AgentLib\bin\Release\Newtonsoft.Json.xml
+C:\Code\GitHub\USBAdmin2.0\Client\AgentLib\obj\Release\AgentLib.csproj.CopyComplete

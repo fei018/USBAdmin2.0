@@ -157,7 +157,12 @@ namespace AgentLib
             {
                 var agentResult = HttpClient_Get(AgentRegistry.UsbWhitelistUrl);
 
-                UsbWhitelist.Set_And_Load_UsbWhitelist_byHttp(agentResult.UsbWhitelist);
+                if (string.IsNullOrEmpty(agentResult.UsbWhitelist))
+                {
+                    throw new Exception("AgentHttpHelp.UpdateUSBWhitelist(): UsbWhitelist is null or empty.");
+                }
+
+                UsbWhitelist.Write_UsbWhitelist_byHttp(agentResult.UsbWhitelist);
             }
             catch (Exception ex)
             {

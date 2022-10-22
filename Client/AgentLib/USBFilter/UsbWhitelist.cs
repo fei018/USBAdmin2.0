@@ -10,80 +10,47 @@ namespace AgentLib
 {
     public class UsbWhitelist
     {
-        private static string _UsbWhitelistFile;
-
-        private static List<string> _CacheDb;
-
-        private static readonly object _Locker_CacheDb = new object();
-
         private static readonly object _Locker_Whitelist = new object();
 
-        public UsbWhitelist()
+        private static string _UsbWhitelistFilePath
         {
-            try
+            get
             {
-                _UsbWhitelistFile = AgentRegistry.UsbWhitelistPath ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "usbwhitelist.dat");
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        #region + private void Reload_UsbWhitelistCache()
-        private void Reload_UsbWhitelistCache()
-        {
-            try
-            {
-                var table = ReadFile_UsbWhitelist();
-
-                lock (_Locker_CacheDb)
+                try
                 {
-                    if (_CacheDb == null)
-                    {
-                        _CacheDb = new List<string>(table.Length);
-                    }
-                    else
-                    {
-                        _CacheDb.Clear();
-                        _CacheDb.Capacity = table.Length;
-                    }
-
-                    foreach (string line in table)
-                    {
-                        try
-                        {
-                            if (!string.IsNullOrWhiteSpace(line))
-                            {
-                                _CacheDb.Add(line);
-                            }
-                        }
-                        catch (Exception) { throw; }
-                    }
+                    return AgentRegistry.UsbWhitelistPath ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "usbwhitelist.dat");
+                }
+                catch (Exception)
+                {
+                    return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "usbwhitelist.dat");
                 }
             }
-            catch (Exception)
-            {
-                throw;
-            }
         }
-        #endregion
 
-        #region + private string[] ReadFile_UsbWhitelist()
+        #region + private static string[] ReadFile_UsbWhitelist()
 
-        private string[] ReadFile_UsbWhitelist()
+        private static string[] ReadFile_UsbWhitelist()
         {
             lock (_Locker_Whitelist)
             {
                 try
                 {
-                    if (File.Exists(_UsbWhitelistFile))
+                    if (File.Exists(AgentRegistry.UsbWhitelistPath))
                     {
-                        return File.ReadAllLines(_UsbWhitelistFile, new UTF8Encoding(false));
+                        //string read = File.ReadAllText(_UsbWhitelistFilePath, new UTF8Encoding(false));
+
+                        string[] read = File.ReadAllText(_UsbWhitelistFilePath).Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        if (read.Length <= 0)
+                        {
+                            throw new Exception("UsbWhitelist.ReadFile_UsbWhitelist(): usbwhitelist.dat content is empty.");
+                        }
+
+                        return read;
                     }
                     else
                     {
-                        throw new Exception(_UsbWhitelistFile + " not exist.");
+                        throw new Exception(_UsbWhitelistFilePath + " not exist.");
                     }
                 }
                 catch (Exception)
@@ -94,18 +61,18 @@ namespace AgentLib
         }
         #endregion
 
-        #region + private void WriteFile_UsbWhitelist(string txt)
-        private void WriteFile_UsbWhitelist(string txt)
+        #region + private static void WriteFile_UsbWhitelist(string txt)
+        private static void WriteFile_UsbWhitelist(string txt)
         {
             lock (_Locker_Whitelist)
             {
                 try
                 {
-                    File.WriteAllText(_UsbWhitelistFile, txt, new UTF8Encoding(false));
+                    File.WriteAllText(_UsbWhitelistFilePath, txt);
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(_UsbWhitelistFile + "\r\nWrite file Error:\r\n" + ex.GetBaseException().Message);
+                    throw new Exception(_UsbWhitelistFilePath + "\r\nWrite file Error:\r\n" + ex.GetBaseException().Message);
                 }
             }
         }
@@ -116,30 +83,13 @@ namespace AgentLib
         {
             try
             {
-                //if (_CacheDb == null || _CacheDb.Count <= 0)
-                //{
-                //    new UsbWhitelist().Reload_UsbWhitelistCache();
-                //}
+                string[] table = ReadFile_UsbWhitelist();
 
-                //if (_CacheDb != null && _CacheDb.Count >= 1)
-                //{
-                //    if(_CacheDb.Any(c=> c.Equals(usb.UsbIdentity)))
-                //    {
-                //        return true;
-                //    }
-                //}
-
-                UsbWhitelist whiteList = new UsbWhitelist();
-                string[] table = whiteList.ReadFile_UsbWhitelist();
-
-                if (table.Length >= 1)
+                foreach (string t in table)
                 {
-                    foreach (string t in table)
+                    if (t == usb.UsbIdentity)
                     {
-                        if (t.Equals(usb.UsbIdentity))
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
 
@@ -153,14 +103,12 @@ namespace AgentLib
         }
         #endregion
 
-        #region + public static void Set_UsbWhitelist_byHttp(UsbFilterDbHttp setting)
-        public static void Set_And_Load_UsbWhitelist_byHttp(string usbWhitelist)
+        #region + public static void Write_UsbWhitelist_byHttp(UsbFilterDbHttp setting)
+        public static void Write_UsbWhitelist_byHttp(string usbWhitelist)
         {
             try
             {
-                UsbWhitelist white = new UsbWhitelist();
-                white.WriteFile_UsbWhitelist(UtilityTools.Base64Decode(usbWhitelist));
-                white.Reload_UsbWhitelistCache();
+                WriteFile_UsbWhitelist(UtilityTools.Base64Decode(usbWhitelist));
             }
             catch (Exception)
             {

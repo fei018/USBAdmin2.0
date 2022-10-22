@@ -122,9 +122,9 @@ namespace USBModel
                 StringBuilder whitelist = new StringBuilder();
 
                 // UsbIdentity encode to Base64                   
-                foreach (var u in query)
+                foreach (Tbl_UsbRequest u in query)
                 {
-                    whitelist.AppendLine(u.UsbIdentity);
+                    whitelist.Append(u.UsbIdentity + ";");
                 }
 
                 return UtilityTools.Base64Encode(whitelist.ToString());

@@ -29,7 +29,7 @@ namespace AgentLib
         /// <summary>
         /// 
         /// </summary>
-        /// <returns>Lowercase string</returns>
+        /// <returns>Lower case string</returns>
         public string UsbIdentity => (Vid.ToString() + Pid.ToString() + SerialNumber).ToLower();
     }
 }

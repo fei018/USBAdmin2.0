@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\CodeRepos\USBAdmin2.0\Client\USBAdminTray\obj\Release\
+C:\Code\GitHub\USBAdmin2.0\Client\USBAdminTray\obj\Release\
 USBAdminTray
 none
 false
 TRACE
-C:\CodeRepos\USBAdmin2.0\Client\USBAdminTray\App.xaml
+C:\Code\GitHub\USBAdmin2.0\Client\USBAdminTray\App.xaml
 3-1393437449
 
-121606604850
-19307866295
+13-1307255076
+19-1065834313
 Windows\UsbQRCodeWindow.xaml;Windows\AboutWindow.xaml;MainWindow.xaml;
 
-False
+True
 
