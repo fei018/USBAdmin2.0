@@ -218,7 +218,7 @@ namespace AgentLib
                 var comIdentity = ComputerInfoHelp.GetComputerIdentity();
                 var usb = new UsbFilter().Get_USBInfo_FromUsbDisk_By_DiskPath(diskPath);
 
-                IUsbLog usbHistory = new UsbLog
+                IUsbLog usbLog = new UsbLog
                 {
                     ComputerIdentity = comIdentity,
                     DeviceDescription = usb.DeviceDescription,
@@ -230,7 +230,7 @@ namespace AgentLib
                     PluginTime = DateTime.Now
                 };
 
-                HttpClient_Post(AgentRegistry.PostUsbLogUrl, usbHistory);
+                HttpClient_Post(AgentRegistry.PostUsbLogUrl, usbLog);
             }
             catch (Exception ex)
             {

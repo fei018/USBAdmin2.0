@@ -21,6 +21,8 @@ namespace USBAdminService
         #region OnStart
         public static void OnStart()
         {
+            FirstRun();
+
             NamedPipeServer = new NamedPipeServer();
             NamedPipeServer.Start();
 
@@ -37,7 +39,6 @@ namespace USBAdminService
             ScheduleServer = new ScheduleServer();
             ScheduleServer.Start();
 
-            FirstRun();
         }
         #endregion
 

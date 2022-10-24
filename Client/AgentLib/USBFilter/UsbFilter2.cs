@@ -109,7 +109,7 @@ namespace AgentLib
                                 var result = disk.InvokeMethod("SetAttributes", inParams, null)["ReturnValue"].ToString();
                                 if (!string.IsNullOrWhiteSpace(result))
                                 {
-                                    AgentLogger.Log("DiskNumber: " + diskNumber + "\r\n" + "Set readOnly result: \r\n" + result);
+                                    AgentLogger.Error("DiskNumber: " + diskNumber + "\r\n" + "Set readOnly result: \r\n" + result);
                                 }
                             }
                         }
@@ -145,7 +145,7 @@ namespace AgentLib
                             string result = Set_Disk_IsReadOnly_WMI(d, isReadOnly);
                             if (!string.IsNullOrWhiteSpace(result) && result != "0")
                             {
-                                AgentLogger.Log(diskPath + "\r\n" + "Set ReadOnly result:\r\n" + result);
+                                AgentLogger.Error(diskPath + "\r\n" + "Set ReadOnly result:\r\n" + result);
                             }
                         }
                     }
@@ -206,7 +206,7 @@ namespace AgentLib
 
         #region + Get_UsbDeviceId_By_DiskPath_SetupDi(UsbDisk usbDisk)
         /// <summary>
-        /// ref UsbDisk usbDisk 需要賦值 usbDisk.DiskPath <br />
+        /// UsbDisk usbDisk 需要賦值 usbDisk.DiskPath <br />
         /// 只匹配 DeviceId format: ^USB\xxxx 
         /// </summary>
         /// <param name="notifyPath"></param>

@@ -1,6 +1,7 @@
 ﻿using AgentLib.Win32API;
 using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace AgentLib
 {
@@ -40,6 +41,11 @@ namespace AgentLib
         {
             try
             {
+                if (!File.Exists(appFullPath))
+                {
+                    throw new Exception($"AppProcessHelp.StartupProcessAsLogonUser():\r\n{appFullPath}, not exists.");
+                }
+
                 Process proc = null;
 
                 var sessionid = ProcessApiHelp.GetCurrentUserSessionID();
@@ -49,7 +55,7 @@ namespace AgentLib
                 }
                 else
                 {
-                    throw new Exception("StartupProcessAsLogonUser() : ProcessApiHelp.GetCurrentUserSessionID() <= 0 , " + appFullPath);
+                    throw new Exception("AppProcessHelp.StartupProcessAsLogonUser(): ProcessApiHelp.GetCurrentUserSessionID() <= 0 , " + appFullPath);
                 }
 
                 return proc;

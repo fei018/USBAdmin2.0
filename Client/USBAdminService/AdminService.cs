@@ -16,6 +16,8 @@ namespace USBAdminService
         public AdminService()
         {
             InitializeComponent();
+
+            this.CanHandleSessionChangeEvent = true;
         }
 
         protected override void OnStart(string[] args)
@@ -30,12 +32,12 @@ namespace USBAdminService
 
         protected override void OnSessionChange(SessionChangeDescription changeDescription)
         {
-            if (changeDescription.Reason == SessionChangeReason.SessionLogon)
-            {
-                ServerManage_Service.TrayServer.CreateTray();
-            }
-
             base.OnSessionChange(changeDescription);
+
+            if (changeDescription.Reason == SessionChangeReason.SessionLogon)
+            {               
+                ServerManage_Service.TrayServer?.CreateTray();
+            }
         }
     }
 }

@@ -51,12 +51,12 @@ namespace AgentLib
                     return;
                 }
 
-                UsbDisk usb = Get_USBInfo_FromUsbDisk_By_DiskPath(diskPath);
-                
-                if (usb == null)
+                var usb = new UsbDisk { DiskPath = diskPath };
+
+                if (!Get_UsbDeviceId_By_DiskPath_SetupDi(usb))
                 {
-                    // 找不到 大多數係 非 USB device
-                    throw new Exception ("Filter_UsbDevice_Class_Is_UsbDisk_By_DiskPath():\r\n" + usb.ToString());
+                    //Set_Disk_IsReadOnly_by_DiskPath_WMI(usb.DiskPath, true);
+                    return;
                 }
 
                 if (!_usbBus.Fill_USB_Info_By_USBDeviceId(usb))

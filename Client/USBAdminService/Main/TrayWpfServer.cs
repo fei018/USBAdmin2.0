@@ -66,7 +66,7 @@ namespace USBAdminService
             {
                 if (_trayProcessList == null)
                 {
-                    throw new Exception("TrayWpfServer._trayProcessList is null.");
+                    _trayProcessList = new List<Process>(); 
                 }
 
                 Process proc = AppProcessHelp.StartupAppAsLogonUser(AgentRegistry.USBAdminTrayPath);

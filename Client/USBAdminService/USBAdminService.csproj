@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D8B2DE8B-B313-47B1-95FA-C795131A748D}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>USBAdminService</RootNamespace>
     <AssemblyName>USBAdminService</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>

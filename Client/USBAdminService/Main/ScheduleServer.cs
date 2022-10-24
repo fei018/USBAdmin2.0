@@ -44,11 +44,6 @@ namespace USBAdminService
                 var http = new AgentHttpHelp();
                 http.UpdateAgentRule();
                 http.UpdateUSBWhitelist();
-
-                if (AgentRegistry.UsbFilterEnabled)
-                {
-                    new UsbFilter().Scan_All_USBDisk_To_Filter();
-                }
             }
             catch (Exception ex)
             {
@@ -154,7 +149,7 @@ namespace USBAdminService
         #endregion
 
         #region + private void TryReset()
-        private void TryReset()
+        public void TryReset()
         {
             try
             {

@@ -109,12 +109,13 @@ namespace USBAdminService
 
         private void UpdateSetting_ServerHandle()
         {
+            #region agent update
             try
             {
                 if (AgentUpdate.CheckNeedUpdate())
                 {
                     new AgentUpdate().Update();
-                    SendMsg_To_Tray_BalloonTip("Agent new version checked\r\nwait to updating...");
+                    SendMsg_To_Tray_BalloonTip("Agent new version checked,\r\nwaiting for update.");
                     SendMsg_To_Tray_Close();
                     return;
                 }
@@ -124,12 +125,15 @@ namespace USBAdminService
                 AgentLogger.Error(ex.Message);
                 SendMsg_To_Tray_Message(ex.Message);
             }
+            #endregion
 
             StringBuilder error = new StringBuilder();
 
+            #region update setting
             try
             {
                 new AgentHttpHelp().UpdateAgentRule();
+                ServerManage_Service.ScheduleServer?.TryReset();
             }
             catch (Exception ex)
             {
@@ -146,6 +150,7 @@ namespace USBAdminService
                 AgentLogger.Error(ex.Message);
                 error.AppendLine("Error: " + ex.Message);
             }
+            #endregion
 
             if (string.IsNullOrEmpty(error.ToString()))
             {

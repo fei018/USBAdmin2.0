@@ -9,6 +9,5 @@ if exist %zip% del %zip% /q
 
 copy %zip% \\hhdmstest02.hiphing.nws\USBAdmin\Update\Agent
 
-rem copy %zip% \\127.0.0.1\Share\HHITtools
 
 pause

@@ -13,7 +13,7 @@ namespace AgentLib
         private static readonly string _baseDir = GetLogDir();
 
 
-        private static string LogPath => Path.Combine(_baseDir, "log.txt");
+        //private static string LogPath => Path.Combine(_baseDir, "log.txt");
 
         private static string ErrorPath => Path.Combine(_baseDir, "error.txt");
 
@@ -29,11 +29,6 @@ namespace AgentLib
             }
         }
 
-        public static void Log(string log)
-        {
-            LogToFile(LogPath, log);
-        }
-
         public static void Error(string error)
         {
             LogToFile(ErrorPath, error);
@@ -44,6 +39,8 @@ namespace AgentLib
 
         static void LogToFile(string path, string log)
         {
+            CheckSize();
+
             if (!File.Exists(_baseDir))
             {
                 Directory.CreateDirectory(_baseDir);
@@ -69,6 +66,26 @@ namespace AgentLib
                     mutex.ReleaseMutex();
                 }
             });         
+        }
+
+        private static void CheckSize()
+        {
+            try
+            {
+                FileInfo file = new FileInfo(ErrorPath);
+                if (file.Exists)
+                {
+                    if (file.Length > 20971520) // unit byte , 20 MB = 20971520 Bytes
+                    {
+                        file.Delete();
+                    }
+                }
+
+                file = null;
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }
