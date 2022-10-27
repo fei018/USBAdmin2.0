@@ -38,7 +38,6 @@ namespace AgentLib
             {
                 ComputerInfo userComputer = new ComputerInfo();
                 userComputer.AgentVersion = AgentRegistry.AgentVersion;
-                userComputer.UsbFilterEnabled = AgentRegistry.UsbFilterEnabled;
                 userComputer.HostName = IPGlobalProperties.GetIPGlobalProperties().HostName;
                 userComputer.Domain = IPGlobalProperties.GetIPGlobalProperties().DomainName;
                 //try

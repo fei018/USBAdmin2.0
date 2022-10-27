@@ -60,29 +60,32 @@ namespace USBAdminService
         #region FirstRun()
         private static void FirstRun()
         {
-            #region PostComputerInfo
-            try
+            if (ToolsHelp.CheckNetworkConnectivity())
             {
-                new AgentHttpHelp().PostComputerInfo();
-            }
-            catch (Exception ex)
-            {
-                AgentLogger.Error("ServerManage_Service.FirstRun():PostComputerInfo:\r\n" + ex.Message);
-            }
-            #endregion
+                #region PostComputerInfo
+                try
+                {
+                    new AgentHttpHelp().PostComputerInfo();
+                }
+                catch (Exception ex)
+                {
+                    AgentLogger.Error("ServerManage_Service.FirstRun():PostComputerInfo:\r\n" + ex.Message);
+                }
+                #endregion
 
-            #region update setting
-            try
-            {
-                var http = new AgentHttpHelp();
-                http.UpdateAgentRule();
-                http.UpdateUSBWhitelist();
+                #region update setting
+                try
+                {
+                    var http = new AgentHttpHelp();
+                    http.UpdateAgentRule();
+                    http.UpdateUSBWhitelist();
+                }
+                catch (Exception ex)
+                {
+                    AgentLogger.Error("ServerManage_Service.FirstRun():Update Setting:\r\n" + ex.Message);
+                }
+                #endregion
             }
-            catch (Exception ex)
-            {
-                AgentLogger.Error("ServerManage_Service.FirstRun():Update Setting:\r\n" + ex.Message);
-            }
-            #endregion
 
             #region UsbFilterEnabled Scan_All_USBDisk_To_Filter
             try

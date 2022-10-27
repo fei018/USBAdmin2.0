@@ -10,3 +10,4 @@ C:\Code\GitHub\USBAdmin2.0\Server\ToolsCommon\bin\Release\ToolsCommon.dll
 C:\Code\GitHub\USBAdmin2.0\Server\ToolsCommon\obj\Release\ToolsCommon.csproj.AssemblyReference.cache
 C:\Code\GitHub\USBAdmin2.0\Server\ToolsCommon\obj\Release\ToolsCommon.csproj.CoreCompileInputs.cache
 C:\Code\GitHub\USBAdmin2.0\Server\ToolsCommon\obj\Release\ToolsCommon.dll
+C:\CodeRepos\USBAdmin2.0\Server\ToolsCommon\obj\Release\ToolsCommon.csproj.AssemblyReference.cache

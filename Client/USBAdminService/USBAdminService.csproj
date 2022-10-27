@@ -61,6 +61,7 @@
       <DependentUpon>AdminService.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\ScheduleServer.cs" />
+    <Compile Include="Main\ToolsHelp.cs" />
     <Compile Include="Main\TrayWpfServer.cs" />
     <Compile Include="Main\NamedPipeServer.cs" />
     <Compile Include="Main\ServerManage_Service.cs" />
